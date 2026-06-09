@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Velino TypeX</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+transition:0.3s;
+}
+
+/* LIGHT THEME */
+body.light{
+background:#f4f4f4;
+color:#111;
+}
+
+body.light .topbar{
+background:#e2e8f0;
+}
+
+body.light .box{
+background:#ffffff;
+color:#111;
+}
+
+body.light button,
+body.light select{
+background:#2563eb;
+color:white;
+}
+
+/* CONTAINER */
+/* CONTAINER */ .container{ max-width:900px; margin:auto; padding:20px; text-align:center; }
+/* TOPBAR */
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:12px 16px;
+margin-bottom:20px;
+background:rgba(40, 48, 67, 0.9);
+border-radius:12px;
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.08);
+transition:0.3s;
+}
+
+body.light .topbar{
+background:rgba(205, 204, 204, 0.8);
+border:1px solid rgba(0,0,0,0.08);
+}
+
+/* CONTROLS */
+.left-controls{
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+button, select{
+padding:8px 12px;
+border:none;
+border-radius:10px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
+
+.title{
+font-size:16px;
+font-weight:bold;
+opacity:0.8;
+}
+
+.stats{
+display:flex;
+gap:10px;
+}
+
+.box{
+background:rgba(74, 89, 108, 0.7);
+padding:8px 12px;
+border-radius:10px;
+min-width:70px;
+text-align:center;
+}
+
+.label{
+font-size:10px;
+opacity:0.6;
+display:block;
+}
+
+/* TEXT */
+#text{
+font-size:26px;
+line-height:2.5;
+
+margin-top:10px;
+}
+
+.char{display:inline-block;}
+.space{min-width:21px;}
+.correct{color:#22c55e;}
+.wrong{color:#ef4444;}
+.current{
+background:#2284c5;
+color:white;
+border-radius:4px;
+padding:2px 4px;
+}
+
+/* SWITCH */
+.switch{
+position:relative;
+display:inline-block;
+width:46px;
+height:24px;
+}
+
+.switch input{display:none;}
+
+.slider{
+position:absolute;
+cursor:pointer;
+top:0;left:0;right:0;bottom:0;
+background:#555;
+border-radius:34px;
+transition:0.3s;
+}
+
+.slider:before{
+position:absolute;
+content:"";
+height:18px;
+width:18px;
+left:3px;
+bottom:3px;
+background:white;
+border-radius:50%;
+transition:0.3s;
+}
+
+input:checked + .slider{background:#22c55e;}
+input:checked + .slider:before{transform:translateX(22px);}
+
+.switch-group{
+display:flex;
+align-items:center;
+gap:6px;
+font-size:12px;
+}
+
+/* ================= SPLASH SCREEN ================= */
+
+#splash-screen{
+position:fixed;
+inset:0;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background: radial-gradient(circle at top, #111, #000);
+z-index:999999;
+transition:opacity .8s ease;
+}
+
+.splash-line{
+width:500px;
+height:1px;
+margin:20px 0;
+background:linear-gradient(90deg,transparent,rgba(0,195,255,.9),transparent);
+animation:lineGlow 2s infinite;
+}
+
+.apple-logo-text{
+font-size:3rem;
+font-weight:200;
+letter-spacing:10px;
+color:white;
+text-shadow:0 0 20px rgba(0,195,255,0.3);
+}
+
+.splash-tagline{
+margin-top:20px;
+color:rgba(255,255,255,.7);
+letter-spacing:4px;
+font-size:14px;
+}
+
+@keyframes lineGlow{
+0%,100%{opacity:.3; transform:scaleX(0.9);}
+50%{opacity:1; transform:scaleX(1);}
+}
+
+#splash-screen.fade-out{
+opacity:0;
+}
+
+@media(max-width:768px){
+.splash-line{width:200px;}
+.apple-logo-text{font-size:1.8rem;}
+.splash-tagline{font-size:12px;}
+}
+.main-title{
+text-align:center;
+font-size:30px;
+font-weight:800;
+letter-spacing:3px;
+margin:20px 0 10px 0;
+color:#00c3ff;
+text-shadow:0 0 10px rgba(0,195,255,0.4);
+animation: glowText 2s infinite ease-in-out;
+}
+
+/* Glow Animation */
+/* @keyframes glowText{
+0%{
+text-shadow:0 0 5px rgba(0,195,255,0.3),
+0 0 10px rgba(0,195,255,0.2);
+transform:scale(1);
+}
+
+50%{
+text-shadow:0 0 15px rgba(0,195,255,0.8),
+0 0 30px rgba(0,195,255,0.6),
+0 0 40px rgba(0,195,255,0.4);
+transform:scale(1.03);
+}
+
+100%{
+text-shadow:0 0 5px rgba(0,195,255,0.3),
+0 0 10px rgba(0,195,255,0.2);
+transform:scale(1);
+}
+} */
+
+/* LIGHT THEME SUPPORT */
+body.light .main-title{
+color:#2563eb;
+animation: glowTextLight 2s infinite ease-in-out;
+}
+
+@keyframes glowTextLight{
+0%{
+text-shadow:0 0 5px rgba(37,99,235,0.2);
+transform:scale(1);
+}
+
+50%{
+text-shadow:0 0 20px rgba(37,99,235,0.6),
+0 0 35px rgba(37,99,235,0.4);
+transform:scale(1.03);
+}
+
+100%{
+text-shadow:0 0 5px rgba(37,99,235,0.2);
+transform:scale(1);
+}
+}
+
+/* LIGHT THEME SUPPORT */
+body.light .main-title{
+color:#111;
+text-shadow:none;
+}
+
+/* CURSOR */ .current{ background:#2284c5; color:white; border-radius:4px; padding:2px 4px; line-height:1; }
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash-screen">
+    <div class="splash-line"></div>
+    <div class="apple-logo-text">VELINO ECOSYSTEM</div>
+    <div class="splash-line"></div>
+    <div class="splash-tagline">Developed By Shiva Velishoju</div>
+</div>
+<div class="main-title">
+    Velino TypeX
+</div>
+<div class="container">
+
+<div class="topbar">
+<div class="left-controls">
+<button onclick="newTest()">New Text</button>
+<button onclick="clearStats()">Clear</button>
+
+<select id="modeSelect">
+<option value="easy">Easy</option>
+<option value="medium" selected>Medium</option>
+<option value="hard">Hard</option>
+</select>
+
+<div class="switch-group">
+<span>🔊</span>
+<label class="switch">
+<input type="checkbox" id="soundToggle" checked>
+<span class="slider"></span>
+</label>
+</div>
+
+<div class="switch-group">
+<span>🌙</span>
+<label class="switch">
+<input type="checkbox" id="themeToggle">
+<span class="slider"></span>
+</label>
+</div>
+</div>
+
+
+
+<div class="stats">
+<div class="box"><span class="label">WPM</span><h3 id="wpm">0</h3></div>
+<div class="box"><span class="label">Accuracy</span><h3 id="acc">0</h3></div>
+<div class="box"><span class="label">Error</span><h3 id="err">0</h3></div>
+
+</div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div id="text"></div>
+</div>
+
+<script>
+    function clearStats(){
+    totalTyped = 0;
+    totalErrors = 0;
+    startTime = Date.now();
+
+    document.getElementById("wpm").innerText = 0;
+    document.getElementById("acc").innerText = 0;
+    document.getElementById("err").innerText = 0;
+}
+
+/* WORDS */
+const words = ["the","and","you","that","was","for","are","with","his","they","this","have","from","one","had","word","but","not","what","all"];
+
+let soundEnabled = true;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+/* FIX FLAG */
+let testCompleted = false;
+
+function beep(freq,duration){
+if(!soundEnabled) return;
+let o=audioCtx.createOscillator();
+let g=audioCtx.createGain();
+o.connect(g);g.connect(audioCtx.destination);
+o.frequency.value=freq;
+o.start();
+g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+duration);
+o.stop(audioCtx.currentTime+duration);
+}
+
+let text="",chars=[],index=0;
+let typedState=[],errorMap=[];
+let totalTyped=0,totalErrors=0,startTime=Date.now();
+
+function generateText(){
+let pool=words;
+let arr=[];
+for(let i=0;i<50;i++){
+arr.push(pool[Math.floor(Math.random()*pool.length)]);
+}
+return arr.join(" ");
+}
+
+function newTest(){
+testCompleted = false;   // ✅ FIX HERE
+
+text=generateText();
+chars=text.split("");
+index=0;
+typedState=[];
+errorMap=[];
+totalTyped=0;
+totalErrors=0;
+startTime=Date.now();
+renderText();
+}
+
+function renderText(){
+let html="";
+for(let i=0;i<chars.length;i++){
+let cls="char";
+if(errorMap[i]) cls+=" wrong";
+if(i===index) cls+=" current";
+if(typedState[i]==="correct") cls+=" correct";
+html+=`<span class="${cls}">${chars[i]===" "?"&nbsp;":chars[i]}</span>`;
+}
+document.getElementById("text").innerHTML=html;
+}
+
+document.addEventListener("keydown",(e)=>{
+if(!chars.length) return;
+if(e.key.length!==1 && e.key!=="Backspace") return;
+
+if(e.key==="Backspace"){
+if(index>0){index--;totalTyped--;}
+renderText();updateStats();
+return;
+}
+
+if(totalTyped===0) startTime=Date.now();
+
+totalTyped++;
+
+let expected=chars[index];
+
+if(e.key === expected){
+    typedState[index] = "correct";
+    beep(600,0.05);
+    index++; // ✅ move only on correct
+}
+else{
+    typedState[index] = "wrong";
+    errorMap[index] = true;
+    totalErrors++;
+    beep(150,0.1);
+
+    // ❌ DO NOT move index
+}
+renderText();
+updateStats();
+
+/* ✅ FIXED COMPLETION LOGIC */
+if(index >= chars.length && !testCompleted){
+testCompleted = true;
+updateStats();
+
+setTimeout(()=>{
+newTest();
+},3000);
+}
+});
+
+function updateStats(){
+let time=(Date.now()-startTime)/60000;
+if(time<=0) time=0.01;
+
+let wpm=Math.round((totalTyped/5)/time);
+let acc=Math.max(0,Math.round(((totalTyped-totalErrors)/totalTyped)*100));
+
+document.getElementById("wpm").innerText=wpm;
+document.getElementById("acc").innerText=acc;
+document.getElementById("err").innerText=totalErrors;
+}
+
+/* CONTROLS */
+document.getElementById("soundToggle").onchange=e=>soundEnabled=e.target.checked;
+document.getElementById("themeToggle").onchange=e=>document.body.classList.toggle("light",e.target.checked);
+document.getElementById("modeSelect").onchange=newTest;
+
+/* SPLASH */
+window.addEventListener("load",()=>{
+setTimeout(()=>{
+document.getElementById("splash-screen").classList.add("fade-out");
+setTimeout(()=>{
+document.getElementById("splash-screen").style.display="none";
+},800);
+},2500);
+});
+
+newTest();
+
+</script>
+
+</body>
+</html>
