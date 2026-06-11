@@ -598,7 +598,34 @@ color:#111;
 body.light #currentUser{
     color:#2563eb;
 }
+.login-hint{
+    margin-top:20px;
+    padding:12px;
 
+    border-radius:10px;
+
+    background:rgba(0,195,255,.08);
+
+    border:1px solid rgba(0,195,255,.2);
+
+    color:#cbd5e1;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.login-hint strong{
+    color:#00c3ff;
+}
+
+body.light .login-hint{
+    background:rgba(37,99,235,.08);
+    border:1px solid rgba(37,99,235,.15);
+    color:#374151;
+}
+
+body.light .login-hint strong{
+    color:#2563eb;
+}
 
 /* CURSOR */ .current{ background:#2284c5; color:white; border-radius:4px; padding:2px 4px; line-height:1; }
 </style>
@@ -656,7 +683,11 @@ body.light #currentUser{
         </div>
 
         <p id="loginError"></p>
-
+        <div class="login-hint">
+            <strong>Demo Account</strong><br>
+            Username: <b>admin</b><br>
+            Password: <b>admin123</b>
+        </div>
     </div>
 
 </div>
@@ -1155,10 +1186,10 @@ showLogin();
 function login(){
 
 const user =
-document.getElementById("username").value;
+document.getElementById("username").value.trim();
 
 const pass =
-document.getElementById("password").value;
+document.getElementById("password").value.trim();
 
 const savedUser =
 localStorage.getItem("velinoUser");
@@ -1166,7 +1197,16 @@ localStorage.getItem("velinoUser");
 const savedPass =
 localStorage.getItem("velinoPass");
 
-if(user === savedUser && pass === savedPass){
+/* Default Account */
+const defaultUser = "admin";
+const defaultPass = "admin123";
+
+if(
+    (user === defaultUser && pass === defaultPass) ||
+    (user === savedUser && pass === savedPass)
+){
+
+    document.getElementById("currentUser").innerText = user;
 
     document.getElementById("loginScreen").style.display = "none";
 
@@ -1177,11 +1217,6 @@ if(user === savedUser && pass === savedPass){
     document.getElementById("loginError").innerText =
     "Invalid Username or Password";
 }
-}
-const savedUser = localStorage.getItem("velinoUser");
-
-if(savedUser){
-    document.getElementById("currentUser").innerText = savedUser;
 }
         </script>
 
