@@ -87,12 +87,6 @@ color:white;
 cursor:pointer;
 }
 
-.title{
-font-size:16px;
-font-weight:bold;
-opacity:0.8;
-}
-
 .stats{
 display:flex;
 gap:10px;
@@ -117,7 +111,7 @@ display:block;
 font-size:26px;
 line-height:2.5;
 
-margin-top:10px;
+margin-top:1px;
 }
 
 .char{display:inline-block;}
@@ -343,18 +337,21 @@ cursor:pointer;
 background:#2563eb;
 color:white;
 }
-/* LIGHT THEME SUPPORT */
-body.light .main-title{
-color:#111;
-text-shadow:none;
+
+.logo{
+width:270px;
+height:auto;
+
 }
+
+
 
 /* CURSOR */ .current{ background:#2284c5; color:white; border-radius:4px; padding:2px 4px; line-height:1; }
 </style>
 </head>
 
 <body>
-
+    
 <!-- SPLASH -->
 <div id="splash-screen">
     <div class="splash-line"></div>
@@ -362,11 +359,9 @@ text-shadow:none;
     <div class="splash-line"></div>
     <div class="splash-tagline">Developed By Shiva Velishoju</div>
 </div>
-<div class="main-title">
-    Velino TypeX
-</div>
-<div class="container">
 
+<div class="container">
+    <img src="velinoTypeX.png" class="logo">
     <div class="topbar">
 
         <div class="left-controls">
@@ -433,9 +428,6 @@ text-shadow:none;
         </div>
     
     </div>
-    
-    <br>
-    <br>
     <br>
     <br>
     <br>
@@ -455,7 +447,7 @@ text-shadow:none;
             <button onclick="newTest();closeResult();">New Test</button>
         </div>
     </div>
-    <div class="ads-section">
+    <!-- <div class="ads-section">
 
         <iframe
         width="100%"
@@ -466,7 +458,7 @@ text-shadow:none;
         allowfullscreen>
     </iframe>
     
-    </div>
+    </div> -->
     <style>.ads-section{
         margin-top:50px;
         padding:20px;
