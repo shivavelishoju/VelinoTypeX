@@ -15,7 +15,7 @@ transition:0.3s;
 
 /* LIGHT THEME */
 body.light{
-background:#f4f4f4;
+background:#f4f4f4 ;
 color:#111;
 }
 
@@ -41,13 +41,15 @@ color:white;
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:12px 16px;
+padding:15px 20px;
 margin-bottom:20px;
-background:rgba(40, 48, 67, 0.9);
+background:rgba(40,48,67,0.9);
 border-radius:12px;
 backdrop-filter:blur(10px);
 border:1px solid rgba(255,255,255,0.08);
 transition:0.3s;
+width:100%;
+box-sizing:border-box;
 }
 
 body.light .topbar{
@@ -55,11 +57,25 @@ background:rgba(205, 204, 204, 0.8);
 border:1px solid rgba(0,0,0,0.08);
 }
 
-/* CONTROLS */
 .left-controls{
 display:flex;
-gap:10px;
+gap:12px;
 align-items:center;
+flex-wrap:wrap;
+}
+
+.stats{
+display:flex;
+gap:12px;
+align-items:center;
+justify-content:center;
+flex-wrap:wrap;
+}
+.container{
+width:85%;
+max-width:1800px;
+margin:auto;
+padding:20px;
 }
 
 button, select{
@@ -171,26 +187,54 @@ transition:opacity .8s ease;
 }
 
 .splash-line{
-width:500px;
-height:1px;
-margin:20px 0;
-background:linear-gradient(90deg,transparent,rgba(0,195,255,.9),transparent);
-animation:lineGlow 2s infinite;
+    width:800px;
+    height:1px;
+
+    margin:20px 0;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(12, 110, 180, 0.8),
+        transparent
+    );
+
+    animation:lineGlow 2s ease-in-out infinite;
 }
 
 .apple-logo-text{
-font-size:3rem;
-font-weight:200;
-letter-spacing:10px;
-color:white;
+    font-size:3rem;
+    font-weight:100;
+    letter-spacing:8px;
+
+    color:white;
+
+    text-align:center;
 text-shadow:0 0 20px rgba(0,195,255,0.3);
 }
 
 .splash-tagline{
-margin-top:20px;
-color:rgba(255,255,255,.7);
-letter-spacing:4px;
+    margin-top:20px;
+
+color:rgba(255, 255, 255, 0.7);
+
+letter-spacing:3px;
+
 font-size:14px;
+}
+#splash-screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background: #000;
+    z-index: 999999;
+
+    opacity: 1;
+    transition: opacity 0.8s ease;
 }
 
 @keyframes lineGlow{
@@ -219,7 +263,7 @@ animation: glowText 2s infinite ease-in-out;
 }
 
 /* Glow Animation */
-/* @keyframes glowText{
+@keyframes glowText{
 0%{
 text-shadow:0 0 5px rgba(0,195,255,0.3),
 0 0 10px rgba(0,195,255,0.2);
@@ -238,7 +282,7 @@ text-shadow:0 0 5px rgba(0,195,255,0.3),
 0 0 10px rgba(0,195,255,0.2);
 transform:scale(1);
 }
-} */
+}
 
 /* LIGHT THEME SUPPORT */
 body.light .main-title{
@@ -263,7 +307,42 @@ text-shadow:0 0 5px rgba(37,99,235,0.2);
 transform:scale(1);
 }
 }
+.result-modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.8);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
 
+.result-box{
+background:#1e293b;
+padding:30px;
+border-radius:15px;
+text-align:center;
+min-width:350px;
+/* box-shadow:0 0 30px rgba(0,195,255,.5); */
+}
+
+.result-box h2{
+margin-top:0;
+color:#a3a5a6;
+}
+
+.result-box button{
+margin:8px;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#2563eb;
+color:white;
+}
 /* LIGHT THEME SUPPORT */
 body.light .main-title{
 color:#111;
@@ -288,197 +367,449 @@ text-shadow:none;
 </div>
 <div class="container">
 
-<div class="topbar">
-<div class="left-controls">
-<button onclick="newTest()">New Text</button>
-<button onclick="clearStats()">Clear</button>
+    <div class="topbar">
 
-<select id="modeSelect">
-<option value="easy">Easy</option>
-<option value="medium" selected>Medium</option>
-<option value="hard">Hard</option>
-</select>
+        <div class="left-controls">
+    
+            <button onclick="newTest()">New Text</button>
+            <button onclick="clearStats()">Clear</button>
+            <button onclick="showResult()">Results</button>
+    
+            <select id="modeSelect">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+    
+            <select id="timeSelect">
+                <option value="30">30 Sec</option>
+                <option value="60" selected>1 Min</option>
+                <option value="120">2 Min</option>
+                <option value="180">3 Min</option>
+                <option value="240">4 Min</option>
+                <option value="300">5 Min</option>
+            </select>
+    
+            <div class="switch-group">
+                <span>🔊</span>
+                <label class="switch">
+                    <input type="checkbox" id="soundToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+    
+            <div class="switch-group">
+                <span>🌙</span>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+    
+        </div>
+    
+        <div class="stats">
+    
+            <div class="box">
+                <span class="label">WPM</span>
+                <h3 id="wpm">0</h3>
+            </div>
+    
+            <div class="box">
+                <span class="label">Accuracy</span>
+                <h3 id="acc">0</h3>
+            </div>
+    
+            <div class="box">
+                <span class="label">Error</span>
+                <h3 id="err">0</h3>
+            </div>
+    
+            <div class="box">
+                <span class="label">Time</span>
+                <h3 id="timer">60</h3>
+            </div>
+    
+        </div>
+    
+    </div>
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div id="text"></div>
+    <div id="resultModal" class="result-modal">
+        <div class="result-box">
+            <h2>🏆 Typing Results</h2>
+    
+            <p>WPM: <span id="resultWpm">0</span></p>
+            <p>Accuracy: <span id="resultAcc">0</span>%</p>
+            <p>Errors: <span id="resultErr">0</span></p>
+    
+            <button onclick="closeResult()">Close</button>
+            <button onclick="newTest();closeResult();">New Test</button>
+        </div>
+    </div>
+    <div class="ads-section">
 
-<div class="switch-group">
-<span>🔊</span>
-<label class="switch">
-<input type="checkbox" id="soundToggle" checked>
-<span class="slider"></span>
-</label>
-</div>
+        <iframe
+        width="100%"
+        height="120"
+        src="https://www.youtube.com/embed/kQcq3rpne78?autoplay=1&mute=1&loop=1&playlist=kQcq3rpne78"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+        allowfullscreen>
+    </iframe>
+    
+    </div>
+    <style>.ads-section{
+        margin-top:50px;
+        padding:20px;
+        background:rgba(255,255,255,0.05);
+        border-radius:12px;
+        }
+        
+        .ads-section iframe{
+        width:100%;
+        height:100px;
+        border:none;
+        border-radius:10px;
+        margin-bottom:15px;
+        background:white;
+        }</style>
+    <script>
 
-<div class="switch-group">
-<span>🌙</span>
-<label class="switch">
-<input type="checkbox" id="themeToggle">
-<span class="slider"></span>
-</label>
-</div>
-</div>
-
-
-
-<div class="stats">
-<div class="box"><span class="label">WPM</span><h3 id="wpm">0</h3></div>
-<div class="box"><span class="label">Accuracy</span><h3 id="acc">0</h3></div>
-<div class="box"><span class="label">Error</span><h3 id="err">0</h3></div>
-
-</div>
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-<div id="text"></div>
-</div>
-
-<script>
-    function clearStats(){
-    totalTyped = 0;
-    totalErrors = 0;
-    startTime = Date.now();
-
-    document.getElementById("wpm").innerText = 0;
-    document.getElementById("acc").innerText = 0;
-    document.getElementById("err").innerText = 0;
-}
-
-/* WORDS */
-const words = ["the","and","you","that","was","for","are","with","his","they","this","have","from","one","had","word","but","not","what","all"];
-
-let soundEnabled = true;
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-/* FIX FLAG */
-let testCompleted = false;
-
-function beep(freq,duration){
-if(!soundEnabled) return;
-let o=audioCtx.createOscillator();
-let g=audioCtx.createGain();
-o.connect(g);g.connect(audioCtx.destination);
-o.frequency.value=freq;
-o.start();
-g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+duration);
-o.stop(audioCtx.currentTime+duration);
-}
-
-let text="",chars=[],index=0;
-let typedState=[],errorMap=[];
-let totalTyped=0,totalErrors=0,startTime=Date.now();
-
-function generateText(){
-let pool=words;
-let arr=[];
-for(let i=0;i<50;i++){
-arr.push(pool[Math.floor(Math.random()*pool.length)]);
-}
-return arr.join(" ");
-}
-
-function newTest(){
-testCompleted = false;   // ✅ FIX HERE
-
-text=generateText();
-chars=text.split("");
-index=0;
-typedState=[];
-errorMap=[];
-totalTyped=0;
-totalErrors=0;
-startTime=Date.now();
-renderText();
-}
-
-function renderText(){
-let html="";
-for(let i=0;i<chars.length;i++){
-let cls="char";
-if(errorMap[i]) cls+=" wrong";
-if(i===index) cls+=" current";
-if(typedState[i]==="correct") cls+=" correct";
-html+=`<span class="${cls}">${chars[i]===" "?"&nbsp;":chars[i]}</span>`;
-}
-document.getElementById("text").innerHTML=html;
-}
-
-document.addEventListener("keydown",(e)=>{
-if(!chars.length) return;
-if(e.key.length!==1 && e.key!=="Backspace") return;
-
-if(e.key==="Backspace"){
-if(index>0){index--;totalTyped--;}
-renderText();updateStats();
-return;
-}
-
-if(totalTyped===0) startTime=Date.now();
-
-totalTyped++;
-
-let expected=chars[index];
-
-if(e.key === expected){
-    typedState[index] = "correct";
-    beep(600,0.05);
-    index++; // ✅ move only on correct
-}
-else{
-    typedState[index] = "wrong";
-    errorMap[index] = true;
-    totalErrors++;
-    beep(150,0.1);
-
-    // ❌ DO NOT move index
-}
-renderText();
-updateStats();
-
-/* ✅ FIXED COMPLETION LOGIC */
-if(index >= chars.length && !testCompleted){
-testCompleted = true;
-updateStats();
-
-setTimeout(()=>{
-newTest();
-},3000);
-}
-});
-
-function updateStats(){
-let time=(Date.now()-startTime)/60000;
-if(time<=0) time=0.01;
-
-let wpm=Math.round((totalTyped/5)/time);
-let acc=Math.max(0,Math.round(((totalTyped-totalErrors)/totalTyped)*100));
-
-document.getElementById("wpm").innerText=wpm;
-document.getElementById("acc").innerText=acc;
-document.getElementById("err").innerText=totalErrors;
-}
-
-/* CONTROLS */
-document.getElementById("soundToggle").onchange=e=>soundEnabled=e.target.checked;
-document.getElementById("themeToggle").onchange=e=>document.body.classList.toggle("light",e.target.checked);
-document.getElementById("modeSelect").onchange=newTest;
-
-/* SPLASH */
-window.addEventListener("load",()=>{
-setTimeout(()=>{
-document.getElementById("splash-screen").classList.add("fade-out");
-setTimeout(()=>{
-document.getElementById("splash-screen").style.display="none";
-},800);
-},2500);
-});
-
-newTest();
-
-</script>
+        function showResult(){
+        
+            document.getElementById("resultWpm").innerText =
+            document.getElementById("wpm").innerText;
+        
+            document.getElementById("resultAcc").innerText =
+            document.getElementById("acc").innerText;
+        
+            document.getElementById("resultErr").innerText =
+            document.getElementById("err").innerText;
+        
+            document.getElementById("resultModal").style.display = "flex";
+        }
+        
+        function closeResult(){
+        
+            document.getElementById("resultModal").style.display = "none";
+        }
+        
+        function clearStats(){
+        
+            totalTyped = 0;
+            totalErrors = 0;
+        
+            document.getElementById("wpm").innerText = 0;
+            document.getElementById("acc").innerText = 0;
+            document.getElementById("err").innerText = 0;
+        }
+        
+        /* WORDS */
+        const words = [
+        "the","and","you","that","was","for","are","with","his","they",
+        "this","have","from","one","had","word","but","not","what","all"
+        ];
+        
+        let soundEnabled = true;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        /* TEST STATE */
+        let testCompleted = false;
+        
+        /* TIMER */
+        let selectedTime = 60;
+        let timeLeft = 60;
+        let timerInterval = null;
+        let timerStarted = false;
+        
+        /* DATA */
+        let text = "";
+        let chars = [];
+        let index = 0;
+        
+        let typedState = [];
+        let errorMap = [];
+        
+        let totalTyped = 0;
+        let totalErrors = 0;
+        
+        let startTime = Date.now();
+        
+        /* SOUND */
+        function beep(freq,duration){
+        
+            if(!soundEnabled) return;
+        
+            let o = audioCtx.createOscillator();
+            let g = audioCtx.createGain();
+        
+            o.connect(g);
+            g.connect(audioCtx.destination);
+        
+            o.frequency.value = freq;
+        
+            o.start();
+        
+            g.gain.exponentialRampToValueAtTime(
+                0.0001,
+                audioCtx.currentTime + duration
+            );
+        
+            o.stop(audioCtx.currentTime + duration);
+        }
+        
+        /* TIMER */
+        function startTimer(){
+        
+            if(timerStarted) return;
+        
+            timerStarted = true;
+        
+            timerInterval = setInterval(()=>{
+        
+                timeLeft--;
+        
+                document.getElementById("timer").innerText = timeLeft;
+        
+                if(timeLeft <= 0){
+        
+                    clearInterval(timerInterval);
+        
+                    showResult();
+                }
+        
+            },1000);
+        }
+        
+        /* GENERATE TEXT */
+        function generateText(){
+        
+            let arr = [];
+        
+            for(let i=0;i<50;i++){
+        
+                arr.push(
+                    words[Math.floor(Math.random()*words.length)]
+                );
+            }
+        
+            return arr.join(" ");
+        }
+        
+        /* NEW TEST */
+        function newTest(){
+        
+            closeResult();
+        
+            testCompleted = false;
+        
+            clearInterval(timerInterval);
+        
+            selectedTime = parseInt(
+                document.getElementById("timeSelect").value
+            );
+        
+            timeLeft = selectedTime;
+        
+            timerStarted = false;
+        
+            document.getElementById("timer").innerText = timeLeft;
+        
+            text = generateText();
+        
+            chars = text.split("");
+        
+            index = 0;
+        
+            typedState = [];
+            errorMap = [];
+        
+            totalTyped = 0;
+            totalErrors = 0;
+        
+            startTime = Date.now();
+        
+            renderText();
+        
+            updateStats();
+        }
+        
+        /* RENDER */
+        function renderText(){
+        
+            let html = "";
+        
+            for(let i=0;i<chars.length;i++){
+        
+                let cls = "char";
+        
+                if(errorMap[i])
+                    cls += " wrong";
+        
+                if(typedState[i] === "correct")
+                    cls += " correct";
+        
+                if(i === index)
+                    cls += " current";
+        
+                html += `<span class="${cls}">
+                ${chars[i] === " " ? "&nbsp;" : chars[i]}
+                </span>`;
+            }
+        
+            document.getElementById("text").innerHTML = html;
+        }
+        
+        /* KEYBOARD */
+        document.addEventListener("keydown",(e)=>{
+        
+            if(!chars.length) return;
+        
+            if(e.key.length !== 1 && e.key !== "Backspace")
+                return;
+        
+            /* BACKSPACE */
+            if(e.key === "Backspace"){
+        
+                if(index > 0){
+        
+                    index--;
+        
+                    typedState[index] = null;
+                    errorMap[index] = false;
+                }
+        
+                renderText();
+                updateStats();
+        
+                return;
+            }
+        
+            /* START TIMER */
+            if(totalTyped === 0){
+        
+                startTime = Date.now();
+        
+                startTimer();
+            }
+        
+            totalTyped++;
+        
+            let expected = chars[index];
+        
+            /* CORRECT */
+            if(e.key === expected){
+        
+                typedState[index] = "correct";
+        
+                beep(600,0.05);
+        
+                index++;
+            }
+        
+            /* WRONG */
+            else{
+        
+                typedState[index] = "wrong";
+        
+                errorMap[index] = true;
+        
+                totalErrors++;
+        
+                beep(150,0.1);
+            }
+        
+            renderText();
+        
+            updateStats();
+        
+            /* COMPLETE */
+            if(index >= chars.length && !testCompleted){
+        
+                testCompleted = true;
+        
+                clearInterval(timerInterval);
+        
+                showResult();
+            }
+        });
+        
+        /* STATS */
+        function updateStats(){
+        
+            let time =
+            (Date.now() - startTime) / 60000;
+        
+            if(time <= 0)
+                time = 0.01;
+        
+            let wpm =
+            Math.round((totalTyped / 5) / time);
+        
+            let acc =
+            totalTyped === 0
+            ? 0
+            : Math.max(
+                0,
+                Math.round(
+                    ((totalTyped-totalErrors)/totalTyped)*100
+                )
+            );
+        
+            document.getElementById("wpm").innerText = wpm;
+            document.getElementById("acc").innerText = acc;
+            document.getElementById("err").innerText = totalErrors;
+        }
+        
+        /* CONTROLS */
+        document.getElementById("soundToggle").onchange =
+        e => soundEnabled = e.target.checked;
+        
+        document.getElementById("themeToggle").onchange =
+        e => document.body.classList.toggle(
+        "light",
+        e.target.checked
+        );
+        
+        document.getElementById("modeSelect").onchange =
+        newTest;
+        
+        document.getElementById("timeSelect").onchange =
+        newTest;
+        
+        /* SPLASH */
+        window.addEventListener("load",()=>{
+        
+            setTimeout(()=>{
+        
+                document
+                .getElementById("splash-screen")
+                .classList.add("fade-out");
+        
+                setTimeout(()=>{
+        
+                    document
+                    .getElementById("splash-screen")
+                    .style.display = "none";
+        
+                },800);
+        
+            },2500);
+        });
+        
+        /* START */
+        newTest();
+        
+        </script>
 
 </body>
 </html>
