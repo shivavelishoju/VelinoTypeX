@@ -1120,7 +1120,9 @@ body.light .demo-btn{
     <div class="developer-credit">
         Developed by Shiva Velishoju
     </div>
-    
+    <audio id="introSound" preload="auto">
+        <source src="effect-for-logo-intro-186595.mp3" type="audio/mpeg">
+    </audio>
     
     </div>
     <div id="welcomeScreen">
@@ -1707,24 +1709,54 @@ window.onload = function () {
 const splash = document.getElementById("splash-screen");
 const welcome = document.getElementById("welcomeScreen");
 const login = document.getElementById("loginScreen");
+const sound = document.getElementById("introSound");
 
-// Hide everything except splash
+// Reset screens
 welcome.classList.remove("show");
 login.style.display = "none";
 
-// Splash visible for 2.5 seconds
+/* ================= PLAY SPLASH SOUND ================= */
+if (sound) {
+    sound.volume = 1;
+
+    const playPromise = sound.play();
+
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            console.log("Autoplay blocked - will play on interaction");
+        });
+    }
+}
+
+// Splash timing
 setTimeout(() => {
 
     splash.classList.add("fade-out");
 
+    /* ================= AUDIO FADE OUT ================= */
+    let fadeAudio = setInterval(() => {
+
+        if (sound && sound.volume > 0.05) {
+            sound.volume -= 0.05;
+        } else {
+            clearInterval(fadeAudio);
+
+            if (sound) {
+                sound.pause();
+                sound.currentTime = 0;
+            }
+        }
+
+    }, 50);
+
+    // Remove splash and continue flow
     setTimeout(() => {
 
         splash.style.display = "none";
 
-        // Show Welcome Screen
+        // Show welcome screen
         welcome.classList.add("show");
 
-        // Welcome visible for 2.5 seconds
         setTimeout(() => {
 
             welcome.classList.remove("show");
@@ -1733,7 +1765,6 @@ setTimeout(() => {
 
                 welcome.style.display = "none";
 
-                // Show Login
                 login.style.display = "flex";
 
             }, 800);
@@ -1743,7 +1774,6 @@ setTimeout(() => {
     }, 800);
 
 }, 2500);
-
 };
         </script>
 <div class="ticker-wrap">
