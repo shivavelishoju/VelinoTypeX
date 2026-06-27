@@ -5,10 +5,17 @@
 <title>Velino TypeX</title>
 
 <style>
+:root{
+    --bg-top:#0d67c8;
+    --bg-bottom:#07427c;
+    --bg-top1:#0d67c8;
+    
+}
+
 body{
 margin:0;
 font-family:Arial;
-background:#0f172a;
+background:#0d67c8;
 color:white;
 transition:0.3s;
 }
@@ -195,7 +202,13 @@ transition:opacity .8s ease;
 
     animation:lineGlow 2s ease-in-out infinite;
 }
-
+.apple-logo-text{
+    color:#ffffff;
+}
+/* Light Theme Logo */
+body.light .apple-logo-text{
+    color:#2563eb;   /* Blue */
+}
 .apple-logo-text{
     font-size:3rem;
     font-weight:100;
@@ -398,13 +411,9 @@ height:auto;
     justify-content:center;
     align-items:center;
 
-    background:
-    radial-gradient(circle at top left,#0ea5e9 0%,transparent 30%),
-    radial-gradient(circle at bottom right,#2563eb 0%,transparent 30%),
-    #0f172a;
-
+    background:linear-gradient(to bottom,var(--bg-top),var(--bg-bottom));
     overflow:hidden;
-    z-index:9999999;
+    z-index:9999;
 }
 
 /* Floating Glow */
@@ -468,8 +477,8 @@ height:auto;
 
     color:#f0f3f4;
 
-    text-shadow:
-    0 0 10px rgba(0,195,255,.5);
+    /* text-shadow:
+    0 0 10px rgba(0,195,255,.5); */
 }
 
 .login-box p.subtitle{
@@ -551,11 +560,9 @@ height:auto;
     color:#ef4444;
 }
 
-body.light .login-screen{
-    background:
-    radial-gradient(circle at top left,#60a5fa 0%,transparent 30%),
-    radial-gradient(circle at bottom right,#2563eb 0%,transparent 30%),
-    #f4f4f4;
+body.light 
+.login-screen{
+    background:linear-gradient(to bottom,var(--bg-top),var(--bg-bottom));
 }
 
 body.light .login-box{
@@ -640,21 +647,494 @@ background:radial-gradient(circle at top,#111,#000);
 z-index:99999999;
 opacity:1;
 }
+.demo-btn{
+    position:relative;
+    overflow:hidden;
+
+    width:100%;
+    margin-top:15px;
+    padding:14px;
+
+    border:none;
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:15px;
+    font-weight:600;
+    color:#fff;
+
+    background:linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a,
+        #22c55e
+    );
+    background-size:250% 250%;
+
+    animation:gradientMove 4s ease infinite;
+
+    transition:
+        transform .3s,
+        box-shadow .3s;
+}
+
+/* Moving Shine */
+.demo-btn::before{
+    content:"";
+
+    position:absolute;
+    top:0;
+    left:-120%;
+
+    width:60%;
+    height:100%;
+
+    background:linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,.55),
+        transparent
+    );
+
+    transform:skewX(-25deg);
+
+    animation:shine 3s infinite;
+}
+
+/* Glow Ring */
+.demo-btn::after{
+    content:"";
+
+    position:absolute;
+    inset:-2px;
+
+    border-radius:14px;
+
+    border:2px solid rgba(34,197,94,.35);
+
+    opacity:0;
+
+    transition:.35s;
+}
+
+.demo-btn:hover{
+    transform:translateY(-4px) scale(1.03);
+
+    box-shadow:
+        0 12px 30px rgba(34,197,94,.35),
+        0 0 25px rgba(34,197,94,.25);
+}
+
+.demo-btn:hover::after{
+    opacity:1;
+}
+
+.demo-btn:active{
+    transform:scale(.97);
+}
+
+@keyframes gradientMove{
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+}
+
+@keyframes shine{
+    0%{
+        left:-120%;
+    }
+
+    100%{
+        left:170%;
+    }
+}
+
+/* Light Theme */
+
+body.light .demo-btn{
+    background:linear-gradient(
+        135deg,
+        #22c55e,
+        #16a34a,
+        #22c55e
+    );
+}
+/* ================= SPLASH SCREEN ================= */
+
+#splash-screen{
+    position:fixed;
+    inset:0;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(to bottom,#0d67c8,#07427c);
+    /* background:black; */
+
+    z-index:999999;
+
+    opacity:1;
+    transition:opacity .8s ease;
+}
+
+#splash-screen.fade-out{
+    opacity:0;
+    pointer-events:none;
+}
+
+/* ================= GLOW LINES ================= */
+
+.splash-line{
+    width:min(1000px,90vw);
+    height:2px;
+
+    margin:20px 0;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgb(255, 255, 255),
+        transparent
+    );
+
+    animation:lineGlow 2s ease-in-out infinite;
+}
+
+@keyframes lineGlow{
+
+    0%,100%{
+        opacity:.3;
+        transform:scaleX(.9);
+    }
+
+    50%{
+        opacity:1;
+        transform:scaleX(1);
+    }
+}
+
+/* ================= LOGO ================= */
+
+.apple-logo-text{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap:nowrap;
+
+    font-size:clamp(1.8rem,8vw,4rem);
+
+    font-weight:100;
+
+    letter-spacing:clamp(4px,.8vw,12px);
+
+    color:#fff;
+
+    text-align:center;
+
+    /* text-shadow:
+    0 0 10px rgba(0,195,255,.3),
+    0 0 20px rgba(0,195,255,.2); */
+
+    perspective:1000px;
+
+    /* animation:logoGlow 3s ease-in-out infinite; */
+}
+
+.apple-logo-text span{
+    display:inline-block;
+    opacity:0;
+    transform:rotateY(90deg);
+    animation:letterRotate .9s ease forwards;
+}
+
+.apple-logo-text span:nth-child(1){animation-delay:.1s;}
+.apple-logo-text span:nth-child(2){animation-delay:.2s;}
+.apple-logo-text span:nth-child(3){animation-delay:.3s;}
+.apple-logo-text span:nth-child(4){animation-delay:.4s;}
+.apple-logo-text span:nth-child(5){animation-delay:.5s;}
+.apple-logo-text span:nth-child(6){animation-delay:.6s;}
+.apple-logo-text span:nth-child(7){animation-delay:.7s;}
+.apple-logo-text span:nth-child(8){animation-delay:.8s;}
+.apple-logo-text span:nth-child(9){animation-delay:.9s;}
+.apple-logo-text span:nth-child(10){animation-delay:1s;}
+.apple-logo-text span:nth-child(11){animation-delay:1.1s;}
+.apple-logo-text span:nth-child(12){animation-delay:1.2s;}
+.apple-logo-text span:nth-child(13){animation-delay:1.3s;}
+.apple-logo-text span:nth-child(14){animation-delay:1.4s;}
+.apple-logo-text span:nth-child(15){animation-delay:1.5s;}
+.apple-logo-text span:nth-child(16){animation-delay:1.6s;}
+
+@keyframes letterRotate{
+
+    from{
+        opacity:0;
+        transform:rotateY(90deg);
+    }
+
+    to{
+        opacity:1;
+        transform:rotateY(0deg);
+    }
+}
+
+@keyframes logoGlow{
+
+    0%,100%{
+        text-shadow:
+        0 0 10px rgba(0,195,255,.3),
+        0 0 20px rgba(0,195,255,.2);
+    }
+
+    50%{
+        text-shadow:
+        0 0 20px rgba(0,195,255,.8),
+        0 0 40px rgba(0,195,255,.5),
+        0 0 60px rgba(0,195,255,.3);
+    }
+}
+
+/* ================= TAGLINE ================= */
+
+.splash-tagline{
+
+    margin-top:20px;
+
+    color:rgb(255, 255, 255);
+
+    letter-spacing:4px;
+
+    font-size:14px;
+
+    text-transform:uppercase;
+
+    animation:fadeUp 2s ease;
+}
+
+/* ================= CREDIT ================= */
+
+.developer-credit{
+
+    margin-top:35px;
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    color:rgb(255, 255, 255);
+
+    animation:fadeUp 2.5s ease;
+}
+
 /* CURSOR */ .current{ background:#2284c5; color:white; border-radius:4px; padding:2px 4px; line-height:1; }
+
+/* ================= WELCOME SCREEN ================= */
+
+#welcomeScreen{
+    position:fixed;
+    inset:0;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:linear-gradient(
+        to bottom,
+        var(--bg-top),
+        var(--bg-bottom)
+    );
+
+    z-index:999999;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:opacity .8s ease;
+}
+
+#welcomeScreen.show{
+    opacity:1;
+    visibility:visible;
+}
+
+/* Welcome text stays exactly center */
+
+#welcomeScreen h1{
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    margin:0;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size:56px;
+    font-weight:200;
+
+    letter-spacing:2px;
+
+    color:#fff;
+}
+
+/* Logo above text */
+
+.ms-logo{
+    position:absolute;
+
+    top:calc(50% - 150px);
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:90px;
+    height:90px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+
+    gap:6px;
+}
+
+/* ================= MICROSOFT LOGO ================= */
+
+.ms-logo{
+    width:90px;
+    height:90px;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+
+    gap:6px;
+
+    margin-bottom:30px;
+}
+
+.ms-logo div{
+    width:42px;
+    height:42px;
+}
+
+.red{
+    background:#f25022;
+}
+
+.green{
+    background:#7fba00;
+}
+
+.blue{
+    background:#00a4ef;
+}
+
+.yellow{
+    background:#ffb900;
+}
+
+/* ================= WELCOME TEXT ================= */
+
+#welcomeScreen h1{
+
+    margin:0;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size:56px;
+
+    font-weight:200;
+
+    letter-spacing:2px;
+
+    color:#ffffff;
+
+    text-align:center;
+}
 </style>
 </head>
 
 <body>
-    
-<!-- SPLASH -->
-<body>
 
-    <div id="splash-screen">
-        <div class="splash-line"></div>
-        <div class="apple-logo-text">VELINO ECOSYSTEM</div>
-        <div class="splash-line"></div>
-        <div class="splash-tagline">Developed By Shiva Velishoju</div>
+<!-- SPLASH -->
+
+  <!-- ================= SPLASH ================= -->
+
+<div id="splash-screen">
+
+
+    <div class="splash-line"></div>
+    
+    <div class="apple-logo-text">
+    
+        <span>V</span>
+        <span>E</span>
+        <span>L</span>
+        <span>I</span>
+        <span>N</span>
+        <span>O</span>
+        <span>&nbsp;</span>
+        <span>E</span>
+        <span>C</span>
+        <span>O</span>
+        <span>S</span>
+        <span>Y</span>
+        <span>S</span>
+        <span>T</span>
+        <span>E</span>
+        <span>M</span>
+    
     </div>
+    
+    <div class="splash-line"></div>
+    <br>
+    <br>
+    <br>
+    <div class="splash-tagline">
+        Full Stack Developer • AI Enthusiast • Innovator
+    </div>
+    
+    <div class="developer-credit">
+        Developed by Shiva Velishoju
+    </div>
+    
+    
+    </div>
+    <div id="welcomeScreen">
+
+        <div class="ms-logo">
+            <div class="red"></div>
+            <div class="green"></div>
+            <div class="blue"></div>
+            <div class="yellow"></div>
+        </div>
+      
+        <h1>Welcome to Velino TypeX</h1>
+      
+      </div>
     
     <!-- Rest of your app -->
     <div class="container">
@@ -671,6 +1151,9 @@ opacity:1;
             <button onclick="showLogin()"> Sign In</button>
 
             <button onclick="showRegister()">Register</button>
+            <button class="demo-btn" onclick="demoLogin() ">
+                Continue with Demo Account
+            </button>
 
         </div>
 
@@ -701,16 +1184,33 @@ opacity:1;
         </div>
 
         <p id="loginError"></p>
-        <div class="login-hint">
+        <!-- <div class="login-hint">
             <strong>Demo Account</strong><br>
             Username: <b>admin</b><br>
             Password: <b>admin123</b>
-        </div>
+        </div> -->
     </div>
 
 </div>
 <div class="container" id="mainApp" style="display:none;">
-    <img src="https://i.postimg.cc/1RfJ1pFL/Chat-GPT-Image-Jun-11-2026-12-03-11-PM.png" class="logo">
+    <!-- <img src="https://i.postimg.cc/1RfJ1pFL/Chat-GPT-Image-Jun-11-2026-12-03-11-PM.png" class="logo"> -->
+    <div class="apple-logo-text">
+    
+        <span>V</span>
+        <span>E</span>
+        <span>L</span>
+        <span>I</span>
+        <span>N</span>
+        <span>O</span>
+        <span>&nbsp;</span>
+        <span>T</span>
+        <span>y</span>
+        <span>p</span>
+        <span>e</span>
+        <span>X</span>
+       
+    
+    </div>
     <div class="topbar">
 
         <div class="left-controls">
@@ -802,6 +1302,17 @@ opacity:1;
    
     <script>
 
+        
+
+function demoLogin(){
+
+document.getElementById("currentUser").innerText = "Demo User";
+
+document.getElementById("loginScreen").style.display = "none";
+
+document.getElementById("mainApp").style.display = "block";
+
+}
         function showResult(){
         
             document.getElementById("resultWpm").innerText =
@@ -1194,13 +1705,41 @@ if(
 window.onload = function () {
 
 const splash = document.getElementById("splash-screen");
+const welcome = document.getElementById("welcomeScreen");
+const login = document.getElementById("loginScreen");
 
+// Hide everything except splash
+welcome.classList.remove("show");
+login.style.display = "none";
+
+// Splash visible for 2.5 seconds
 setTimeout(() => {
 
     splash.classList.add("fade-out");
 
     setTimeout(() => {
-        splash.remove();
+
+        splash.style.display = "none";
+
+        // Show Welcome Screen
+        welcome.classList.add("show");
+
+        // Welcome visible for 2.5 seconds
+        setTimeout(() => {
+
+            welcome.classList.remove("show");
+
+            setTimeout(() => {
+
+                welcome.style.display = "none";
+
+                // Show Login
+                login.style.display = "flex";
+
+            }, 800);
+
+        }, 2500);
+
     }, 800);
 
 }, 2500);
