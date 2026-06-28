@@ -1709,52 +1709,37 @@ window.onload = function () {
 const splash = document.getElementById("splash-screen");
 const welcome = document.getElementById("welcomeScreen");
 const login = document.getElementById("loginScreen");
-const sound = document.getElementById("introSound");
 
-// Reset screens
 welcome.classList.remove("show");
 login.style.display = "none";
 
-/* ================= PLAY SPLASH SOUND ================= */
-if (sound) {
-    sound.volume = 1;
+// ⚠️ DO NOT play sound immediately
+// Wait for first user interaction
 
-    const playPromise = sound.play();
+let soundPlayed = false;
 
-    if (playPromise !== undefined) {
-        playPromise.catch(() => {
-            console.log("Autoplay blocked - will play on interaction");
-        });
+function startExperience() {
+
+    if (!soundPlayed) {
+        playIntroSound();
+        soundPlayed = true;
     }
+
+    document.removeEventListener("click", startExperience);
+    document.removeEventListener("keydown", startExperience);
 }
 
-// Splash timing
+document.addEventListener("click", startExperience);
+document.addEventListener("keydown", startExperience);
+
 setTimeout(() => {
 
     splash.classList.add("fade-out");
 
-    /* ================= AUDIO FADE OUT ================= */
-    let fadeAudio = setInterval(() => {
-
-        if (sound && sound.volume > 0.05) {
-            sound.volume -= 0.05;
-        } else {
-            clearInterval(fadeAudio);
-
-            if (sound) {
-                sound.pause();
-                sound.currentTime = 0;
-            }
-        }
-
-    }, 50);
-
-    // Remove splash and continue flow
     setTimeout(() => {
 
         splash.style.display = "none";
 
-        // Show welcome screen
         welcome.classList.add("show");
 
         setTimeout(() => {
@@ -1764,7 +1749,6 @@ setTimeout(() => {
             setTimeout(() => {
 
                 welcome.style.display = "none";
-
                 login.style.display = "flex";
 
             }, 800);
@@ -1775,6 +1759,127 @@ setTimeout(() => {
 
 }, 2500);
 };
+    // ----------- GLOBAL CENTERED WATERMARK (3-LINE) -----------
+ // ----------- VELINO WATERMARK -----------
+
+function addVelinoWatermark() {
+
+// Remove old watermark/style if exists
+document.getElementById("velino-watermark")?.remove();
+document.getElementById("velino-watermark-style")?.remove();
+
+// Animation Style
+const style = document.createElement("style");
+style.id = "velino-watermark-style";
+
+style.innerHTML = `
+@keyframes velinoRoleRoll {
+
+    0%,15% {
+        transform: translateY(0px);
+    }
+
+    20%,35% {
+        transform: translateY(-30px);
+    }
+
+    40%,55% {
+        transform: translateY(-60px);
+    }
+
+    60%,75% {
+        transform: translateY(-90px);
+    }
+
+    80%,95% {
+        transform: translateY(-120px);
+    }
+
+    100% {
+        transform: translateY(-150px);
+    }
+}
+`;
+
+document.head.appendChild(style);
+
+// Main Watermark Container
+const wmContainer = document.createElement("div");
+wmContainer.id = "velino-watermark";
+
+wmContainer.style.position = "fixed";
+wmContainer.style.top = "90%";
+wmContainer.style.left = "50%";
+wmContainer.style.transform = "translate(-50%, -50%)";
+wmContainer.style.textAlign = "center";
+wmContainer.style.opacity = "4";
+wmContainer.style.pointerEvents = "none";
+wmContainer.style.userSelect = "none";
+wmContainer.style.zIndex = "0";
+
+// ==========================
+// Main Title
+// ==========================
+const title = document.createElement("div");
+// title.innerText = "Velino Ecosystem";
+title.style.fontSize = "80px";
+title.style.fontWeight = 400;
+    title.style.letterSpacing = "6px";   // <-- Add this
+title.style.color = "#888";
+title.style.lineHeight = "1";
+title.style.whiteSpace = "nowrap";
+title.style.marginBottom = "10px";
+
+// ==========================
+// Rotating Text Area
+// ==========================
+const rollWrapper = document.createElement("div");
+rollWrapper.style.height = "30px";
+rollWrapper.style.overflow = "hidden";
+rollWrapper.style.position = "relative";
+
+const rollingText = document.createElement("div");
+
+rollingText.innerHTML = `
+    <div>• Developed By Shiva Velishoju</div>
+    <div>• Founder of Velino IDE</div>
+    <div>• Full Stack Developer</div>
+    <div>• Frontend Developer</div>
+    <div>• AI Enthusiast</div>
+    <div>• Electronics Engineer</div>
+    <div>• Developed By Shiva Velishoju</div>
+`;
+
+rollingText.style.display = "flex";
+rollingText.style.flexDirection = "column";
+rollingText.style.alignItems = "center";
+rollingText.style.fontSize = "18px";
+rollingText.style.fontWeight = "500";
+rollingText.style.letterSpacing = "1px";
+rollingText.style.color = "#888";
+rollingText.style.animation =
+    "velinoRoleRoll 12s infinite ease-in-out";
+
+Array.from(rollingText.children).forEach(item => {
+    item.style.height = "30px";
+    item.style.lineHeight = "30px";
+    item.style.whiteSpace = "nowrap";
+    item.style.textAlign = "center";
+});
+
+rollWrapper.appendChild(rollingText);
+
+// Add Elements
+wmContainer.appendChild(title);
+wmContainer.appendChild(rollWrapper);
+
+// Add to Page
+document.body.appendChild(wmContainer);
+}
+
+// Run
+addVelinoWatermark();
+    // ----------- END WATERMARK -----------
         </script>
 <div class="ticker-wrap">
     <div class="ticker">
@@ -1797,7 +1902,7 @@ setTimeout(() => {
         VELINO POTHOLE DETECTION &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
         VADDI CALCULATOR &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
         SV TECH SOLUTIONS &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
-        SV CREATIONS MARK-56 &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
+        SV CREATIONS MARK-42 &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
         ARDUINO PROJECTS &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
         ELECTRON APPS &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
         MIT APP INVENTOR APPS &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
@@ -1814,7 +1919,7 @@ setTimeout(() => {
         left:0;
         width:100%;
         height:35px;
-        background:#0b1220;
+        background:#143068;
         border-top:1px solid rgba(255,255,255,0.1);
         overflow:hidden;
         z-index:9999;
@@ -1826,7 +1931,7 @@ setTimeout(() => {
         font-size:14px;
         line-height:35px;
         font-weight:600;
-        text-shadow:0 0 10px rgba(0,195,255,0.5);
+        /* text-shadow:0 0 10px rgba(0,195,255,0.5); */
         animation:tickerScroll 25s linear infinite;
     }
     
