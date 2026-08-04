@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Velino TypeX</title>
 
 <style>
@@ -9,15 +10,18 @@
     --bg-top:#0d67c8;
     --bg-bottom:#07427c;
     --bg-top1:#0d67c8;
-    
 }
 
 body{
 margin:0;
-font-family:Arial;
+padding: 0;
+font-family:Arial, sans-serif;
 background:#0d67c8;
 color:white;
 transition:0.3s;
+min-height: 100vh;
+box-sizing: border-box;
+overflow-x: hidden;
 }
 
 /* LIGHT THEME */
@@ -27,7 +31,8 @@ color:#111;
 }
 
 body.light .topbar{
-background:#e2e8f0;
+background:rgba(205, 204, 204, 0.8);
+border:1px solid rgba(0,0,0,0.08);
 }
 
 body.light .box{
@@ -41,14 +46,22 @@ background:#2563eb;
 color:white;
 }
 
-/* CONTAINER */
-/* CONTAINER */ .container{ max-width:900px; margin:auto; padding:20px; text-align:center; }
+/* CONTAINER - FIXED TO SCREEN */
+.container{
+width: 95%;
+max-width: 1400px;
+margin: 0 auto;
+padding: 20px 15px 60px 15px; /* Bottom padding accounts for fixed bottom ticker */
+box-sizing: border-box;
+text-align: center;
+}
+
 /* TOPBAR */
 .topbar{
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:15px 20px;
+padding:12px 20px;
 margin-bottom:20px;
 background:rgba(40,48,67,0.9);
 border-radius:12px;
@@ -57,11 +70,6 @@ border:1px solid rgba(255,255,255,0.08);
 transition:0.3s;
 width:100%;
 box-sizing:border-box;
-}
-
-body.light .topbar{
-background:rgba(205, 204, 204, 0.8);
-border:1px solid rgba(0,0,0,0.08);
 }
 
 .left-controls{
@@ -78,12 +86,6 @@ align-items:center;
 justify-content:center;
 flex-wrap:wrap;
 }
-.container{
-width:95%;
-max-width:1800px;
-margin:auto;
-padding:20px;
-}
 
 button, select{
 padding:8px 12px;
@@ -92,11 +94,6 @@ border-radius:10px;
 background:#2563eb;
 color:white;
 cursor:pointer;
-}
-
-.stats{
-display:flex;
-gap:10px;
 }
 
 .box{
@@ -113,12 +110,30 @@ opacity:0.6;
 display:block;
 }
 
-/* TEXT */
+#userBox{
+min-width:120px;
+}
+
+#currentUser{
+font-size:14px;
+color:#00c3ff;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+margin:0;
+}
+
+body.light #currentUser{
+color:#2563eb;
+}
+
+/* TEXT AREA */
 #text{
 font-size:26px;
-line-height:2.5;
-
-margin-top:1px;
+line-height:2.2;
+margin-top:20px;
+min-height: 120px;
+word-wrap: break-word;
 }
 
 .char{display:inline-block;}
@@ -130,6 +145,67 @@ background:#2284c5;
 color:white;
 border-radius:4px;
 padding:2px 4px;
+}
+
+/* VIRTUAL KEYBOARD - LARGE SIZE */
+.keyboard-container {
+    margin: 25px auto 10px auto;
+    max-width: 950px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    user-select: none;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.key {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    height: 52px;
+    min-width: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+    transition: transform 0.08s ease, background-color 0.1s ease, box-shadow 0.08s ease;
+    text-transform: uppercase;
+}
+
+.key.key-space {
+    width: 360px;
+}
+
+.key.key-backspace {
+    width: 100px;
+}
+
+.key.pressed {
+    background: #00c3ff !important;
+    color: #000 !important;
+    transform: translateY(3px) scale(0.95);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 0 14px rgba(0, 195, 255, 0.8);
+}
+
+body.light .key {
+    background: #ffffff;
+    color: #333;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 0 #cbd5e1;
+}
+
+body.light .key.pressed {
+    background: #2563eb !important;
+    color: #fff !important;
+    box-shadow: 0 1px 0 #1d4ed8, 0 0 14px rgba(37, 99, 235, 0.6);
 }
 
 /* SWITCH */
@@ -173,8 +249,7 @@ gap:6px;
 font-size:12px;
 }
 
-/* ================= SPLASH SCREEN ================= */
-
+/* SPLASH SCREEN */
 #splash-screen{
 position:fixed;
 inset:0;
@@ -182,66 +257,23 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-background: radial-gradient(circle at top, #111, #000);
+background: linear-gradient(to bottom,#0d67c8,#07427c);
 z-index:999999;
+opacity:1;
 transition:opacity .8s ease;
 }
 
+#splash-screen.fade-out{
+opacity:0;
+pointer-events:none;
+}
+
 .splash-line{
-    width:800px;
-    height:1px;
-
+    width:min(1000px,90vw);
+    height:2px;
     margin:20px 0;
-
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(12, 110, 180, 0.8),
-        transparent
-    );
-
+    background:linear-gradient(90deg, transparent, rgb(255, 255, 255), transparent);
     animation:lineGlow 2s ease-in-out infinite;
-}
-.apple-logo-text{
-    color:#ffffff;
-}
-/* Light Theme Logo */
-body.light .apple-logo-text{
-    color:#2563eb;   /* Blue */
-}
-.apple-logo-text{
-    font-size:3rem;
-    font-weight:100;
-    letter-spacing:8px;
-
-    color:white;
-
-    text-align:center;
-text-shadow:0 0 20px rgba(0,195,255,0.3);
-}
-
-.splash-tagline{
-    margin-top:20px;
-
-color:rgba(255, 255, 255, 0.7);
-
-letter-spacing:3px;
-
-font-size:14px;
-}
-#splash-screen {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    background: #000;
-    z-index: 999999;
-
-    opacity: 1;
-    transition: opacity 0.8s ease;
 }
 
 @keyframes lineGlow{
@@ -249,607 +281,16 @@ font-size:14px;
 50%{opacity:1; transform:scaleX(1);}
 }
 
-#splash-screen.fade-out{
-opacity:0;
-}
-
-@media(max-width:768px){
-.splash-line{width:200px;}
-.apple-logo-text{font-size:1.8rem;}
-.splash-tagline{font-size:12px;}
-}
-.main-title{
-text-align:center;
-font-size:30px;
-font-weight:800;
-letter-spacing:3px;
-margin:20px 0 10px 0;
-color:#00c3ff;
-text-shadow:0 0 10px rgba(0,195,255,0.4);
-animation: glowText 2s infinite ease-in-out;
-}
-
-/* Glow Animation */
-@keyframes glowText{
-0%{
-text-shadow:0 0 5px rgba(0,195,255,0.3),
-0 0 10px rgba(0,195,255,0.2);
-transform:scale(1);
-}
-
-50%{
-text-shadow:0 0 15px rgba(0,195,255,0.8),
-0 0 30px rgba(0,195,255,0.6),
-0 0 40px rgba(0,195,255,0.4);
-transform:scale(1.03);
-}
-
-100%{
-text-shadow:0 0 5px rgba(0,195,255,0.3),
-0 0 10px rgba(0,195,255,0.2);
-transform:scale(1);
-}
-}
-
-/* LIGHT THEME SUPPORT */
-body.light .main-title{
-color:#2563eb;
-animation: glowTextLight 2s infinite ease-in-out;
-}
-
-@keyframes glowTextLight{
-0%{
-text-shadow:0 0 5px rgba(37,99,235,0.2);
-transform:scale(1);
-}
-
-50%{
-text-shadow:0 0 20px rgba(37,99,235,0.6),
-0 0 35px rgba(37,99,235,0.4);
-transform:scale(1.03);
-}
-
-100%{
-text-shadow:0 0 5px rgba(37,99,235,0.2);
-transform:scale(1);
-}
-}
-/* =========================
-   RESULT MODAL - DARK MODE
-========================= */
-.result-modal{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,.8);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:99999;
-}
-
-.result-box{
-    background:#1e293b;
-    padding:30px;
-    border-radius:15px;
-    text-align:center;
-    min-width:350px;
-    color:#fff;
-    box-shadow:0 0 25px rgba(0,195,255,.25);
-}
-
-.result-box h2{
-    margin-top:0;
-    color:#60a5fa;
-}
-
-.result-box p{
-    color:#cbd5e1;
-}
-
-.result-box button{
-    margin:8px;
-    padding:10px 20px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    background:#2563eb;
-    color:white;
-    transition:.3s;
-}
-
-.result-box button:hover{
-    transform:translateY(-2px);
-    background:#1d4ed8;
-}
-
-
-/* =========================
-   RESULT MODAL - LIGHT MODE
-========================= */
-body.light .result-modal{
-    background:rgba(255,255,255,.75);
-}
-
-body.light .result-box{
-    background:#ffffff;
-    color:#111827;
-    box-shadow:0 0 25px rgba(0,0,0,.15);
-    border:1px solid #e5e7eb;
-}
-
-body.light .result-box h2{
-    color:#2563eb;
-}
-
-body.light .result-box p{
-    color:#374151;
-}
-
-body.light .result-box button{
-    background:#2563eb;
-    color:#fff;
-}
-
-body.light .result-box button:hover{
-    background:#1d4ed8;
-}
-
-.logo{
-width:270px;
-height:auto;
-
-}
-/* PREMIUM LOGIN SCREEN */
-
-.login-screen{
-    position:fixed;
-    inset:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    background:linear-gradient(to bottom,var(--bg-top),var(--bg-bottom));
-    overflow:hidden;
-    z-index:9999;
-}
-
-/* Floating Glow */
-.login-screen::before{
-    content:"";
-    position:absolute;
-    width:400px;
-    height:400px;
-    border-radius:50%;
-    background:rgba(0,195,255,.15);
-    filter:blur(100px);
-    animation:floatGlow 8s ease-in-out infinite;
-}
-
-@keyframes floatGlow{
-    0%,100%{
-        transform:translate(-100px,-50px);
-    }
-    50%{
-        transform:translate(100px,50px);
-    }
-}
-
-.login-box{
-    position:relative;
-
-    width:420px;
-    padding:40px;
-
-    border-radius:24px;
-
-    background:rgba(30,41,59,.65);
-
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    box-shadow:
-    0 8px 32px rgba(0,0,0,.4),
-    0 0 25px rgba(0,195,255,.15);
-
-    animation:cardFade .8s ease;
-}
-
-@keyframes cardFade{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.login-box h2{
-    margin:0 0 8px;
-    font-size:32px;
-    letter-spacing:2px;
-
-    color:#f0f3f4;
-
-    /* text-shadow:
-    0 0 10px rgba(0,195,255,.5); */
-}
-
-.login-box p.subtitle{
-    color:#94a3b8;
-    font-size:14px;
-    margin-bottom:25px;
-}
-
-.login-box input{
-    width:100%;
-    box-sizing:border-box;
-
-    padding:14px 16px;
-    margin:10px 0;
-
-    border:none;
-    outline:none;
-
-    border-radius:12px;
-
-    background:rgba(255,255,255,.06);
-
-    color:white;
-    font-size:15px;
-
-    transition:.3s;
-}
-
-.login-box input:focus{
-    background:rgba(255,255,255,.1);
-
-    box-shadow:
-    0 0 0 2px rgba(0,195,255,.4);
-}
-
-.login-box input::placeholder{
-    color:#94a3b8;
-}
-
-.login-box button{
-    width:100%;
-    padding:14px;
-
-    margin-top:12px;
-
-    border:none;
-    border-radius:12px;
-
-    font-size:15px;
-    font-weight:600;
-
-    cursor:pointer;
-
-    background:linear-gradient(
-        135deg,
-        #00c3ff,
-        #2563eb
-    );
-
-    color:white;
-
-    transition:.3s;
-}
-
-.login-box button:hover{
-    transform:translateY(-2px);
-
-    box-shadow:
-    0 10px 25px rgba(0,195,255,.35);
-}
-
-.login-box button:active{
-    transform:scale(.98);
-}
-
-#loginError{
-    margin-top:15px;
-    font-size:14px;
-    color:#ef4444;
-}
-
-body.light 
-.login-screen{
-    background:linear-gradient(to bottom,var(--bg-top),var(--bg-bottom));
-}
-
-body.light .login-box{
-    background:rgba(255,255,255,.8);
-    color:#111827;
-    border:1px solid rgba(0,0,0,.08);
-}
-
-body.light .login-box input{
-    background:rgba(0,0,0,.05);
-    color:#111827;
-}
-
-body.light .login-box input::placeholder{
-    color:#6b7280;
-}
-
-/* Light Theme */
-
-body.light .login-screen{
-background:#f4f4f4;
-}
-
-body.light .login-box{
-background:white;
-color:#111;
-}
-#userBox{
-    min-width:120px;
-}
-
-#currentUser{
-    font-size:14px;
-    color:#00c3ff;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-body.light #currentUser{
-    color:#2563eb;
-}
-.login-hint{
-    margin-top:20px;
-    padding:12px;
-
-    border-radius:10px;
-
-    background:rgba(0,195,255,.08);
-
-    border:1px solid rgba(0,195,255,.2);
-
-    color:#cbd5e1;
-    font-size:13px;
-    line-height:1.6;
-}
-
-.login-hint strong{
-    color:#00c3ff;
-}
-
-body.light .login-hint{
-    background:rgba(37,99,235,.08);
-    border:1px solid rgba(37,99,235,.15);
-    color:#374151;
-}
-
-body.light .login-hint strong{
-    color:#2563eb;
-}
-#splash-screen{
-position:fixed;
-top:0;
-left:0;
-width:100vw;
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:radial-gradient(circle at top,#111,#000);
-z-index:99999999;
-opacity:1;
-}
-.demo-btn{
-    position:relative;
-    overflow:hidden;
-
-    width:100%;
-    margin-top:15px;
-    padding:14px;
-
-    border:none;
-    border-radius:12px;
-
-    cursor:pointer;
-
-    font-size:15px;
-    font-weight:600;
-    color:#fff;
-
-    background:linear-gradient(
-        135deg,
-        #22c55e,
-        #16a34a,
-        #22c55e
-    );
-    background-size:250% 250%;
-
-    animation:gradientMove 4s ease infinite;
-
-    transition:
-        transform .3s,
-        box-shadow .3s;
-}
-
-/* Moving Shine */
-.demo-btn::before{
-    content:"";
-
-    position:absolute;
-    top:0;
-    left:-120%;
-
-    width:60%;
-    height:100%;
-
-    background:linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,.55),
-        transparent
-    );
-
-    transform:skewX(-25deg);
-
-    animation:shine 3s infinite;
-}
-
-/* Glow Ring */
-.demo-btn::after{
-    content:"";
-
-    position:absolute;
-    inset:-2px;
-
-    border-radius:14px;
-
-    border:2px solid rgba(34,197,94,.35);
-
-    opacity:0;
-
-    transition:.35s;
-}
-
-.demo-btn:hover{
-    transform:translateY(-4px) scale(1.03);
-
-    box-shadow:
-        0 12px 30px rgba(34,197,94,.35),
-        0 0 25px rgba(34,197,94,.25);
-}
-
-.demo-btn:hover::after{
-    opacity:1;
-}
-
-.demo-btn:active{
-    transform:scale(.97);
-}
-
-@keyframes gradientMove{
-    0%{
-        background-position:0% 50%;
-    }
-
-    50%{
-        background-position:100% 50%;
-    }
-
-    100%{
-        background-position:0% 50%;
-    }
-}
-
-@keyframes shine{
-    0%{
-        left:-120%;
-    }
-
-    100%{
-        left:170%;
-    }
-}
-
-/* Light Theme */
-
-body.light .demo-btn{
-    background:linear-gradient(
-        135deg,
-        #22c55e,
-        #16a34a,
-        #22c55e
-    );
-}
-/* ================= SPLASH SCREEN ================= */
-
-#splash-screen{
-    position:fixed;
-    inset:0;
-
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-
-    background:linear-gradient(to bottom,#0d67c8,#07427c);
-    /* background:black; */
-
-    z-index:999999;
-
-    opacity:1;
-    transition:opacity .8s ease;
-}
-
-#splash-screen.fade-out{
-    opacity:0;
-    pointer-events:none;
-}
-
-/* ================= GLOW LINES ================= */
-
-.splash-line{
-    width:min(1000px,90vw);
-    height:2px;
-
-    margin:20px 0;
-
-    background:linear-gradient(
-        90deg,
-        transparent,
-        rgb(255, 255, 255),
-        transparent
-    );
-
-    animation:lineGlow 2s ease-in-out infinite;
-}
-
-@keyframes lineGlow{
-
-    0%,100%{
-        opacity:.3;
-        transform:scaleX(.9);
-    }
-
-    50%{
-        opacity:1;
-        transform:scaleX(1);
-    }
-}
-
-/* ================= LOGO ================= */
-
 .apple-logo-text{
-
     display:flex;
     justify-content:center;
     align-items:center;
-    flex-wrap:nowrap;
-
     font-size:clamp(1.8rem,8vw,4rem);
-
     font-weight:100;
-
     letter-spacing:clamp(4px,.8vw,12px);
-
     color:#fff;
-
     text-align:center;
-
-    /* text-shadow:
-    0 0 10px rgba(0,195,255,.3),
-    0 0 20px rgba(0,195,255,.2); */
-
     perspective:1000px;
-
-    /* animation:logoGlow 3s ease-in-out infinite; */
 }
 
 .apple-logo-text span{
@@ -877,157 +318,53 @@ body.light .demo-btn{
 .apple-logo-text span:nth-child(16){animation-delay:1.6s;}
 
 @keyframes letterRotate{
-
-    from{
-        opacity:0;
-        transform:rotateY(90deg);
-    }
-
-    to{
-        opacity:1;
-        transform:rotateY(0deg);
-    }
+    from{ opacity:0; transform:rotateY(90deg); }
+    to{ opacity:1; transform:rotateY(0deg); }
 }
-
-@keyframes logoGlow{
-
-    0%,100%{
-        text-shadow:
-        0 0 10px rgba(0,195,255,.3),
-        0 0 20px rgba(0,195,255,.2);
-    }
-
-    50%{
-        text-shadow:
-        0 0 20px rgba(0,195,255,.8),
-        0 0 40px rgba(0,195,255,.5),
-        0 0 60px rgba(0,195,255,.3);
-    }
-}
-
-/* ================= TAGLINE ================= */
 
 .splash-tagline{
-
     margin-top:20px;
-
     color:rgb(255, 255, 255);
-
     letter-spacing:4px;
-
     font-size:14px;
-
     text-transform:uppercase;
-
-    animation:fadeUp 2s ease;
 }
-
-/* ================= CREDIT ================= */
 
 .developer-credit{
-
     margin-top:35px;
-
     font-size:12px;
-
     letter-spacing:2px;
-
     color:rgb(255, 255, 255);
-
-    animation:fadeUp 2.5s ease;
 }
 
-/* CURSOR */ .current{ background:#2284c5; color:white; border-radius:4px; padding:2px 4px; line-height:1; }
-
-/* ================= WELCOME SCREEN ================= */
-
+/* WELCOME SCREEN */
 #welcomeScreen{
     position:fixed;
     inset:0;
-
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
-
-    background:linear-gradient(
-        to bottom,
-        var(--bg-top),
-        var(--bg-bottom)
-    );
-
+    background:linear-gradient(to bottom, var(--bg-top), var(--bg-bottom));
     z-index:999999;
-
     opacity:0;
     visibility:hidden;
-
     transition:opacity .8s ease;
 }
 
-#welcomeScreen.show{
-    opacity:1;
-    visibility:visible;
+#welcomeScreen.show{ 
+    opacity:1; 
+    visibility:visible; 
 }
 
-/* Welcome text stays exactly center */
-
-#welcomeScreen h1{
-    position:absolute;
-
-    top:50%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    margin:0;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-    font-size:56px;
-    font-weight:200;
-
-    letter-spacing:2px;
-
-    color:#fff;
-}
-
-/* Logo above text */
-
-.ms-logo{
-    position:absolute;
-
-    top:calc(50% - 150px);
-    left:50%;
-
-    transform:translateX(-50%);
-
-    width:90px;
-    height:90px;
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-    grid-template-rows:1fr 1fr;
-
-    gap:6px;
-}
-
-/* ================= MICROSOFT LOGO ================= */
-
+/* MICROSOFT LOGO */
 .ms-logo{
     width:90px;
     height:90px;
-
     display:grid;
-
     grid-template-columns:1fr 1fr;
     grid-template-rows:1fr 1fr;
-
     gap:6px;
-
     margin-bottom:30px;
 }
 
@@ -1036,197 +373,226 @@ body.light .demo-btn{
     height:42px;
 }
 
-.red{
-    background:#f25022;
-}
-
-.green{
-    background:#7fba00;
-}
-
-.blue{
-    background:#00a4ef;
-}
-
-.yellow{
-    background:#ffb900;
-}
-
-/* ================= WELCOME TEXT ================= */
+.red{ background:#f25022; }
+.green{ background:#7fba00; }
+.blue{ background:#00a4ef; }
+.yellow{ background:#ffb900; }
 
 #welcomeScreen h1{
-
     margin:0;
-
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size:56px;
-
     font-weight:200;
-
     letter-spacing:2px;
-
     color:#ffffff;
-
     text-align:center;
+}
+
+/* LOGIN SCREEN */
+.login-screen{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(to bottom,var(--bg-top),var(--bg-bottom));
+    overflow:hidden;
+    z-index:9999;
+}
+
+.login-box{
+    position:relative;
+    width:420px;
+    padding:40px;
+    border-radius:24px;
+    background:rgba(30,41,59,.65);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,.4), 0 0 25px rgba(0,195,255,.15);
+    text-align: center;
+}
+
+.login-box h2{ margin:0 0 15px; font-size:32px; letter-spacing:2px; color:#f0f3f4; }
+.login-box input{
+    width:100%;
+    box-sizing:border-box;
+    padding:14px 16px;
+    margin:10px 0;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.06);
+    color:white;
+    font-size:15px;
+}
+
+.login-box button{
+    width:100%;
+    padding:14px;
+    margin-top:12px;
+    border:none;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    background:linear-gradient(135deg, #00c3ff, #2563eb);
+    color:white;
+}
+
+.demo-btn{
+    position:relative;
+    overflow:hidden;
+    width:100%;
+    margin-top:15px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+    color:#fff;
+    background:linear-gradient(135deg, #22c55e, #16a34a, #22c55e);
+}
+
+#loginError{ margin-top:15px; font-size:14px; color:#ef4444; }
+
+/* RESULT MODAL */
+.result-modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.8);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+}
+
+.result-box{
+    background:#1e293b;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    min-width:350px;
+    color:#fff;
+    box-shadow:0 0 25px rgba(0,195,255,.25);
+}
+
+.result-box h2{ margin-top:0; color:#60a5fa; }
+.result-box p{ color:#cbd5e1; }
+.result-box button{
+    margin:8px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+    transition:.3s;
+}
+
+/* TICKER */
+.ticker-wrap{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:35px;
+    background:#143068;
+    border-top:1px solid rgba(255,255,255,0.1);
+    overflow:hidden;
+    z-index:9999;
+}
+
+.ticker{
+    white-space:nowrap;
+    color:#f9feff;
+    font-size:14px;
+    line-height:35px;
+    font-weight:600;
+    animation:tickerScroll 25s linear infinite;
+}
+
+@keyframes tickerScroll{
+    0%{ transform:translateX(100%); }
+    100%{ transform:translateX(-100%); }
 }
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
-
-  <!-- ================= SPLASH ================= -->
-
+<!-- SPLASH SCREEN -->
 <div id="splash-screen">
-
-
     <div class="splash-line"></div>
-    
     <div class="apple-logo-text">
-    
-        <span>V</span>
-        <span>E</span>
-        <span>L</span>
-        <span>I</span>
-        <span>N</span>
-        <span>O</span>
-        <span>&nbsp;</span>
-        <span>E</span>
-        <span>C</span>
-        <span>O</span>
-        <span>S</span>
-        <span>Y</span>
-        <span>S</span>
-        <span>T</span>
-        <span>E</span>
-        <span>M</span>
-    
+        <span>V</span><span>E</span><span>L</span><span>I</span><span>N</span><span>O</span><span>&nbsp;</span><span>E</span><span>C</span><span>O</span><span>S</span><span>Y</span><span>S</span><span>T</span><span>E</span><span>M</span>
     </div>
-    
     <div class="splash-line"></div>
-    <br>
-    <br>
-    <br>
-    <div class="splash-tagline">
-        Full Stack Developer • AI Enthusiast • Innovator
-    </div>
-    
-    <div class="developer-credit">
-        Developed by Shiva Velishoju
-    </div>
+    <br><br><br>
+    <div class="splash-tagline">Full Stack Developer • AI Enthusiast • Innovator</div>
+    <div class="developer-credit">Developed by Shiva Velishoju</div>
     <audio id="introSound" preload="auto">
         <source src="effect-for-logo-intro-186595.mp3" type="audio/mpeg">
     </audio>
-    
-    </div>
-    <div id="welcomeScreen">
+</div>
 
-        <div class="ms-logo">
-            <div class="red"></div>
-            <div class="green"></div>
-            <div class="blue"></div>
-            <div class="yellow"></div>
-        </div>
-      
-        <h1>Welcome to Velino TypeX</h1>
-      
-      </div>
-    
-    <!-- Rest of your app -->
-    <div class="container">
+<!-- WELCOME SCREEN -->
+<div id="welcomeScreen">
+    <div class="ms-logo">
+        <div class="red"></div>
+        <div class="green"></div>
+        <div class="blue"></div>
+        <div class="yellow"></div>
+    </div>
+    <h1>Welcome to Velino TypeX</h1>
+</div>
+
 <!-- LOGIN SCREEN -->
 <div id="loginScreen" class="login-screen">
-
     <div class="login-box">
-
         <h2>Velino TypeX</h2>
 
-        <!-- HOME -->
         <div id="authHome">
-
-            <button onclick="showLogin()"> Sign In</button>
-
+            <button onclick="showLogin()">Sign In</button>
             <button onclick="showRegister()">Register</button>
-            <button class="demo-btn" onclick="demoLogin() ">
-                Continue with Demo Account
-            </button>
-
+            <button class="demo-btn" onclick="demoLogin()">Continue with Demo Account</button>
         </div>
 
-        <!-- LOGIN FORM -->
         <div id="loginForm" style="display:none;">
-
             <input type="text" id="username" placeholder="Username">
-
             <input type="password" id="password" placeholder="Password">
-
             <button onclick="login()">Login</button>
-
             <button onclick="backHome()">Back</button>
-
         </div>
 
-        <!-- REGISTER FORM -->
         <div id="registerForm" style="display:none;">
-
             <input type="text" id="newUser" placeholder="Create Username">
-
             <input type="password" id="newPass" placeholder="Create Password">
-
             <button onclick="register()">Create Account</button>
-
             <button onclick="backHome()">Back</button>
-
         </div>
 
         <p id="loginError"></p>
-        <!-- <div class="login-hint">
-            <strong>Demo Account</strong><br>
-            Username: <b>admin</b><br>
-            Password: <b>admin123</b>
-        </div> -->
     </div>
-
 </div>
-<div class="container" id="mainApp" style="display:none;">
-    <!-- <img src="https://i.postimg.cc/1RfJ1pFL/Chat-GPT-Image-Jun-11-2026-12-03-11-PM.png" class="logo"> -->
-    <!-- <div class="apple-logo-text">
-    
-        <span>V</span>
-        <span>E</span>
-        <span>L</span>
-        <span>I</span>
-        <span>N</span>
-        <span>O</span>
-        <span>&nbsp;</span>
-        <span>T</span>
-        <span>y</span>
-        <span>p</span>
-        <span>e</span>
-        <span>X</span>
-       
-    
-    </div> -->
-    <div class="topbar">
 
+<!-- MAIN APP CONTAINER -->
+<div class="container" id="mainApp" style="display:none;">
+    <div class="topbar">
         <div class="left-controls">
-    
             <button onclick="newTest()">New Text</button>
             <button onclick="clearStats()">Clear</button>
             <button onclick="showResult()">Results</button>
-    
+
             <select id="modeSelect">
                 <option value="easy">Easy</option>
                 <option value="medium" selected>Medium</option>
                 <option value="hard">Hard</option>
             </select>
-    
+
             <select id="timeSelect">
                 <option value="30">30 Sec</option>
                 <option value="60" selected>1 Min</option>
@@ -1235,7 +601,7 @@ body.light .demo-btn{
                 <option value="240">4 Min</option>
                 <option value="300">5 Min</option>
             </select>
-    
+
             <div class="switch-group">
                 <span>🔊</span>
                 <label class="switch">
@@ -1243,7 +609,7 @@ body.light .demo-btn{
                     <span class="slider"></span>
                 </label>
             </div>
-    
+
             <div class="switch-group">
                 <span>🌙</span>
                 <label class="switch">
@@ -1251,26 +617,21 @@ body.light .demo-btn{
                     <span class="slider"></span>
                 </label>
             </div>
-    
         </div>
-    
+
         <div class="stats">
-    
             <div class="box">
                 <span class="label">WPM</span>
                 <h3 id="wpm">0</h3>
             </div>
-    
             <div class="box">
                 <span class="label">Accuracy</span>
                 <h3 id="acc">0</h3>
             </div>
-    
             <div class="box">
                 <span class="label">Error</span>
                 <h3 id="err">0</h3>
             </div>
-    
             <div class="box">
                 <span class="label">Time</span>
                 <h3 id="timer">60</h3>
@@ -1280,607 +641,451 @@ body.light .demo-btn{
                 <h3 id="currentUser">Guest</h3>
             </div>
         </div>
-    
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
     <div id="text"></div>
+
+    <!-- LARGE SIZE VIRTUAL KEYBOARD -->
+    <div class="keyboard-container">
+        <div class="keyboard-row">
+            <div class="key" data-key="q">Q</div>
+            <div class="key" data-key="w">W</div>
+            <div class="key" data-key="e">E</div>
+            <div class="key" data-key="r">R</div>
+            <div class="key" data-key="t">T</div>
+            <div class="key" data-key="y">Y</div>
+            <div class="key" data-key="u">U</div>
+            <div class="key" data-key="i">I</div>
+            <div class="key" data-key="o">O</div>
+            <div class="key" data-key="p">P</div>
+            <div class="key key-backspace" data-key="backspace">⌫</div>
+        </div>
+        <div class="keyboard-row">
+            <div class="key" data-key="a">A</div>
+            <div class="key" data-key="s">S</div>
+            <div class="key" data-key="d">D</div>
+            <div class="key" data-key="f">F</div>
+            <div class="key" data-key="g">G</div>
+            <div class="key" data-key="h">H</div>
+            <div class="key" data-key="j">J</div>
+            <div class="key" data-key="k">K</div>
+            <div class="key" data-key="l">L</div>
+        </div>
+        <div class="keyboard-row">
+            <div class="key" data-key="z">Z</div>
+            <div class="key" data-key="x">X</div>
+            <div class="key" data-key="c">C</div>
+            <div class="key" data-key="v">V</div>
+            <div class="key" data-key="b">B</div>
+            <div class="key" data-key="n">N</div>
+            <div class="key" data-key="m">M</div>
+        </div>
+        <div class="keyboard-row">
+            <div class="key key-space" data-key=" ">SPACE</div>
+        </div>
+    </div>
+
     <div id="resultModal" class="result-modal">
         <div class="result-box">
             <h2>🏆 Typing Results</h2>
-    
             <p>WPM: <span id="resultWpm">0</span></p>
             <p>Accuracy: <span id="resultAcc">0</span>%</p>
             <p>Errors: <span id="resultErr">0</span></p>
-    
+
             <button onclick="closeResult()">Close</button>
             <button onclick="newTest();closeResult();">New Test</button>
         </div>
     </div>
-   
-    <script>
+</div>
 
-        
-
+<script>
 function demoLogin(){
-
-document.getElementById("currentUser").innerText = "Demo User";
-
-document.getElementById("loginScreen").style.display = "none";
-
-document.getElementById("mainApp").style.display = "block";
-
+    document.getElementById("currentUser").innerText = "Demo User";
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("mainApp").style.display = "block";
 }
-        function showResult(){
-        
-            document.getElementById("resultWpm").innerText =
-            document.getElementById("wpm").innerText;
-        
-            document.getElementById("resultAcc").innerText =
-            document.getElementById("acc").innerText;
-        
-            document.getElementById("resultErr").innerText =
-            document.getElementById("err").innerText;
-        
-            document.getElementById("resultModal").style.display = "flex";
-        }
-        
-        function closeResult(){
-        
-            document.getElementById("resultModal").style.display = "none";
-        }
-        
-        function clearStats(){
-        
-            totalTyped = 0;
-            totalErrors = 0;
-        
-            document.getElementById("wpm").innerText = 0;
-            document.getElementById("acc").innerText = 0;
-            document.getElementById("err").innerText = 0;
-        }
-        
-        /* WORDS */
-        const words = [
-        "the","and","you","that","was","for","are","with","his","they",
-        "this","have","from","one","had","word","but","not","what","all"
-        ];
-        
-        let soundEnabled = true;
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        /* TEST STATE */
-        let testCompleted = false;
-        
-        /* TIMER */
-        let selectedTime = 60;
-        let timeLeft = 60;
-        let timerInterval = null;
-        let timerStarted = false;
-        
-        /* DATA */
-        let text = "";
-        let chars = [];
-        let index = 0;
-        
-        let typedState = [];
-        let errorMap = [];
-        
-        let totalTyped = 0;
-        let totalErrors = 0;
-        
-        let startTime = Date.now();
-        
-        /* SOUND */
-        function beep(freq,duration){
-        
-            if(!soundEnabled) return;
-        
-            let o = audioCtx.createOscillator();
-            let g = audioCtx.createGain();
-        
-            o.connect(g);
-            g.connect(audioCtx.destination);
-        
-            o.frequency.value = freq;
-        
-            o.start();
-        
-            g.gain.exponentialRampToValueAtTime(
-                0.0001,
-                audioCtx.currentTime + duration
-            );
-        
-            o.stop(audioCtx.currentTime + duration);
-        }
-        
-        /* TIMER */
-        function startTimer(){
-        
-            if(timerStarted) return;
-        
-            timerStarted = true;
-        
-            timerInterval = setInterval(()=>{
-        
-                timeLeft--;
-        
-                document.getElementById("timer").innerText = timeLeft;
-        
-                if(timeLeft <= 0){
-        
-                    clearInterval(timerInterval);
-        
-                    showResult();
-                }
-        
-            },1000);
-        }
-        
-        /* GENERATE TEXT */
-        function generateText(){
-        
-            let arr = [];
-        
-            for(let i=0;i<50;i++){
-        
-                arr.push(
-                    words[Math.floor(Math.random()*words.length)]
-                );
-            }
-        
-            return arr.join(" ");
-        }
-        
-        /* NEW TEST */
-        function newTest(){
-        
-            closeResult();
-        
-            testCompleted = false;
-        
-            clearInterval(timerInterval);
-        
-            selectedTime = parseInt(
-                document.getElementById("timeSelect").value
-            );
-        
-            timeLeft = selectedTime;
-        
-            timerStarted = false;
-        
-            document.getElementById("timer").innerText = timeLeft;
-        
-            text = generateText();
-        
-            chars = text.split("");
-        
-            index = 0;
-        
-            typedState = [];
-            errorMap = [];
-        
-            totalTyped = 0;
-            totalErrors = 0;
-        
-            startTime = Date.now();
-        
-            renderText();
-        
-            updateStats();
-        }
-        
-        /* RENDER */
-        function renderText(){
-        
-            let html = "";
-        
-            for(let i=0;i<chars.length;i++){
-        
-                let cls = "char";
-        
-                if(errorMap[i])
-                    cls += " wrong";
-        
-                if(typedState[i] === "correct")
-                    cls += " correct";
-        
-                if(i === index)
-                    cls += " current";
-        
-                html += `<span class="${cls}">
-                ${chars[i] === " " ? "&nbsp;" : chars[i]}
-                </span>`;
-            }
-        
-            document.getElementById("text").innerHTML = html;
-        }
-        
-        /* KEYBOARD */
-        document.addEventListener("keydown",(e)=>{
-        
-            if(!chars.length) return;
-        
-            if(e.key.length !== 1 && e.key !== "Backspace")
-                return;
-        
-            /* BACKSPACE */
-            if(e.key === "Backspace"){
-        
-                if(index > 0){
-        
-                    index--;
-        
-                    typedState[index] = null;
-                    errorMap[index] = false;
-                }
-        
-                renderText();
-                updateStats();
-        
-                return;
-            }
-        
-            /* START TIMER */
-            if(totalTyped === 0){
-        
-                startTime = Date.now();
-        
-                startTimer();
-            }
-        
-            totalTyped++;
-        
-            let expected = chars[index];
-        
-            /* CORRECT */
-            if(e.key === expected){
-        
-                typedState[index] = "correct";
-        
-                beep(600,0.05);
-        
-                index++;
-            }
-        
-            /* WRONG */
-            else{
-        
-                typedState[index] = "wrong";
-        
-                errorMap[index] = true;
-        
-                totalErrors++;
-        
-                beep(150,0.1);
-            }
-        
-            renderText();
-        
-            updateStats();
-        
-            /* COMPLETE */
-            if(index >= chars.length && !testCompleted){
-        
-                testCompleted = true;
-        
-                clearInterval(timerInterval);
-        
-                showResult();
-            }
-        });
-        
-        /* STATS */
-        function updateStats(){
-        
-            let time =
-            (Date.now() - startTime) / 60000;
-        
-            if(time <= 0)
-                time = 0.01;
-        
-            let wpm =
-            Math.round((totalTyped / 5) / time);
-        
-            let acc =
-            totalTyped === 0
-            ? 0
-            : Math.max(
-                0,
-                Math.round(
-                    ((totalTyped-totalErrors)/totalTyped)*100
-                )
-            );
-        
-            document.getElementById("wpm").innerText = wpm;
-            document.getElementById("acc").innerText = acc;
-            document.getElementById("err").innerText = totalErrors;
-        }
-        
-        /* CONTROLS */
-        document.getElementById("soundToggle").onchange =
-        e => soundEnabled = e.target.checked;
-        
-        document.getElementById("themeToggle").onchange =
-        e => document.body.classList.toggle(
-        "light",
-        e.target.checked
-        );
-        
-        document.getElementById("modeSelect").onchange =
-        newTest;
-        
-        document.getElementById("timeSelect").onchange =
-        newTest;
-        
-        
-        /* START */
-        newTest();
-        
-        function showLogin(){
 
-document.getElementById("authHome").style.display = "none";
-document.getElementById("loginForm").style.display = "block";
-document.getElementById("registerForm").style.display = "none";
+function showResult(){
+    document.getElementById("resultWpm").innerText = document.getElementById("wpm").innerText;
+    document.getElementById("resultAcc").innerText = document.getElementById("acc").innerText;
+    document.getElementById("resultErr").innerText = document.getElementById("err").innerText;
+    document.getElementById("resultModal").style.display = "flex";
+}
+
+function closeResult(){
+    document.getElementById("resultModal").style.display = "none";
+}
+
+function clearStats(){
+    totalTyped = 0;
+    totalErrors = 0;
+    document.getElementById("wpm").innerText = 0;
+    document.getElementById("acc").innerText = 0;
+    document.getElementById("err").innerText = 0;
+}
+
+/* MONKEYTYPE STYLE WORD LIST (WITH CAPITAL LETTERS) */
+const words = [
+"the", "be", "of", "And", "a", "to", "in", "He", "have", "it", "That", "for", 
+"they", "With", "as", "not", "on", "She", "at", "by", "This", "we", "You", "do", 
+"but", "From", "or", "which", "One", "would", "all", "Will", "there", "Say", 
+"Who", "make", "When", "can", "More", "if", "no", "Man", "out", "other", "so", 
+"What", "time", "up", "go", "About", "than", "into", "Could", "state", "only", 
+"New", "year", "some", "Take", "come", "these", "Know", "see", "use", "Get", 
+"like", "Then", "first", "any", "Work", "now", "may", "Such", "give", "over", 
+"Think", "most", "even", "Find", "day", "Also", "after", "way", "Many", "must", 
+"Look", "before", "great", "Back", "through", "long", "Where", "much", "Should", 
+"well", "People", "down", "own", "Just", "because", "Good", "each", "those", 
+"Feel", "seem", "how", "High", "too", "place", "Little", "world", "Very", "still", 
+"Nation", "hand", "old", "Life", "tell", "Write", "become", "here", "Show", "house", 
+"Both", "between", "need", "Mean", "call", "Develop", "under", "last", "Right", 
+"move", "Thing", "general", "School", "never", "Same", "another", "Begin", "while", 
+"Number", "part", "turn", "Real", "leave", "Might", "want", "Point", "form", "off", 
+"Child", "few", "small", "Since", "against", "Ask", "late", "home", "Interest", 
+"Large", "person", "end", "Open", "public", "Follow", "during", "Present", "without", 
+"Again", "hold", "Govern", "around", "Possible", "head", "Consider", "Word", "Program", 
+"Problem", "however", "Lead", "system", "Set", "order", "Eye", "plan", "Run", "keep", 
+"Face", "fact", "Group", "play", "Stand", "increase", "Early", "course", "Change", "Help",
+"Monday", "Friday", "January", "America", "Velino", "Google", "English", "Earth"
+];
+
+let soundEnabled = true;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+let testCompleted = false;
+let selectedTime = 60;
+let timeLeft = 60;
+let timerInterval = null;
+let timerStarted = false;
+
+let text = "";
+let chars = [];
+let index = 0;
+
+let typedState = [];
+let errorMap = [];
+
+let totalTyped = 0;
+let totalErrors = 0;
+
+let startTime = Date.now();
+
+/* SOUND */
+function beep(freq,duration){
+    if(!soundEnabled) return;
+    let o = audioCtx.createOscillator();
+    let g = audioCtx.createGain();
+
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    o.frequency.value = freq;
+    o.start();
+
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    o.stop(audioCtx.currentTime + duration);
+}
+
+/* TIMER */
+function startTimer(){
+    if(timerStarted) return;
+    timerStarted = true;
+
+    timerInterval = setInterval(()=>{
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+        if(timeLeft <= 0){
+            clearInterval(timerInterval);
+            showResult();
+        }
+    },1000);
+}
+
+/* GENERATE TEXT */
+function generateText(){
+    let arr = [];
+    for(let i=0;i<50;i++){
+        arr.push(words[Math.floor(Math.random()*words.length)]);
+    }
+    return arr.join(" ");
+}
+
+/* NEW TEST */
+function newTest(){
+    closeResult();
+    testCompleted = false;
+    clearInterval(timerInterval);
+
+    selectedTime = parseInt(document.getElementById("timeSelect").value);
+    timeLeft = selectedTime;
+    timerStarted = false;
+
+    document.getElementById("timer").innerText = timeLeft;
+    text = generateText();
+    chars = text.split("");
+    index = 0;
+
+    typedState = [];
+    errorMap = [];
+    totalTyped = 0;
+    totalErrors = 0;
+    startTime = Date.now();
+
+    renderText();
+    updateStats();
+}
+
+/* RENDER */
+function renderText(){
+    let html = "";
+    for(let i=0;i<chars.length;i++){
+        let cls = "char";
+        if(errorMap[i]) cls += " wrong";
+        if(typedState[i] === "correct") cls += " correct";
+        if(i === index) cls += " current";
+
+        html += `<span class="${cls}">${chars[i] === " " ? "&nbsp;" : chars[i]}</span>`;
+    }
+    document.getElementById("text").innerHTML = html;
+}
+
+/* KEYBOARD ANIMATION HELPER */
+function animateVirtualKey(keyName) {
+    const keyElement = document.querySelector(`.key[data-key="${keyName.toLowerCase()}"]`);
+    if (keyElement) {
+        keyElement.classList.add("pressed");
+    }
+}
+
+function removeVirtualKeyAnimation(keyName) {
+    const keyElement = document.querySelector(`.key[data-key="${keyName.toLowerCase()}"]`);
+    if (keyElement) {
+        keyElement.classList.remove("pressed");
+    }
+}
+
+/* KEYBOARD EVENTS */
+document.addEventListener("keydown",(e)=>{
+    if(!chars.length) return;
+    if(e.key.length !== 1 && e.key !== "Backspace") return;
+
+    animateVirtualKey(e.key);
+
+    /* BACKSPACE */
+    if(e.key === "Backspace"){
+        if(index > 0){
+            index--;
+            typedState[index] = null;
+            errorMap[index] = false;
+        }
+        renderText();
+        updateStats();
+        return;
+    }
+
+    /* START TIMER */
+    if(totalTyped === 0){
+        startTime = Date.now();
+        startTimer();
+    }
+
+    totalTyped++;
+    let expected = chars[index];
+
+    /* CORRECT */
+    if(e.key === expected){
+        typedState[index] = "correct";
+        beep(600,0.05);
+        index++;
+    }
+    /* WRONG */
+    else{
+        typedState[index] = "wrong";
+        errorMap[index] = true;
+        totalErrors++;
+        beep(150,0.1);
+    }
+
+    renderText();
+    updateStats();
+
+    /* COMPLETE */
+    if(index >= chars.length && !testCompleted){
+        testCompleted = true;
+        clearInterval(timerInterval);
+        showResult();
+    }
+});
+
+document.addEventListener("keyup", (e) => {
+    removeVirtualKeyAnimation(e.key);
+});
+
+/* STATS */
+function updateStats(){
+    let time = (Date.now() - startTime) / 60000;
+    if(time <= 0) time = 0.01;
+
+    let wpm = Math.round((totalTyped / 5) / time);
+    let acc = totalTyped === 0 ? 0 : Math.max(0, Math.round(((totalTyped-totalErrors)/totalTyped)*100));
+
+    document.getElementById("wpm").innerText = wpm;
+    document.getElementById("acc").innerText = acc;
+    document.getElementById("err").innerText = totalErrors;
+}
+
+/* CONTROLS */
+document.getElementById("soundToggle").onchange = e => soundEnabled = e.target.checked;
+document.getElementById("themeToggle").onchange = e => document.body.classList.toggle("light", e.target.checked);
+document.getElementById("modeSelect").onchange = newTest;
+document.getElementById("timeSelect").onchange = newTest;
+
+newTest();
+
+function showLogin(){
+    document.getElementById("authHome").style.display = "none";
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("registerForm").style.display = "none";
 }
 
 function showRegister(){
-
-document.getElementById("authHome").style.display = "none";
-document.getElementById("registerForm").style.display = "block";
-document.getElementById("loginForm").style.display = "none";
+    document.getElementById("authHome").style.display = "none";
+    document.getElementById("registerForm").style.display = "block";
+    document.getElementById("loginForm").style.display = "none";
 }
 
 function backHome(){
-
-document.getElementById("authHome").style.display = "block";
-document.getElementById("loginForm").style.display = "none";
-document.getElementById("registerForm").style.display = "none";
-
-document.getElementById("loginError").innerText = "";
+    document.getElementById("authHome").style.display = "block";
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("registerForm").style.display = "none";
+    document.getElementById("loginError").innerText = "";
 }
 
 function register(){
+    const user = document.getElementById("newUser").value;
+    const pass = document.getElementById("newPass").value;
 
-const user =
-document.getElementById("newUser").value;
+    if(user === "" || pass === ""){
+        document.getElementById("loginError").innerText = "Please fill all fields";
+        return;
+    }
 
-const pass =
-document.getElementById("newPass").value;
-
-if(user === "" || pass === ""){
-
-    document.getElementById("loginError").innerText =
-    "Please fill all fields";
-
-    return;
-}
-
-localStorage.setItem("velinoUser", user);
-localStorage.setItem("velinoPass", pass);
-
-document.getElementById("loginError").innerText =
-"Account created successfully!";
-
-showLogin();
+    localStorage.setItem("velinoUser", user);
+    localStorage.setItem("velinoPass", pass);
+    document.getElementById("loginError").innerText = "Account created successfully!";
+    showLogin();
 }
 
 function login(){
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const savedUser = localStorage.getItem("velinoUser");
+    const savedPass = localStorage.getItem("velinoPass");
 
-const user =
-document.getElementById("username").value.trim();
-
-const pass =
-document.getElementById("password").value.trim();
-
-const savedUser =
-localStorage.getItem("velinoUser");
-
-const savedPass =
-localStorage.getItem("velinoPass");
-
-/* Default Account */
-const defaultUser = "admin";
-const defaultPass = "admin123";
-
-if(
-    (user === defaultUser && pass === defaultPass) ||
-    (user === savedUser && pass === savedPass)
-){
-
-    document.getElementById("currentUser").innerText = user;
-
-    document.getElementById("loginScreen").style.display = "none";
-
-    document.getElementById("mainApp").style.display = "block";
-
-}else{
-
-    document.getElementById("loginError").innerText =
-    "Invalid Username or Password";
-}
-}
-window.onload = function () {
-
-const splash = document.getElementById("splash-screen");
-const welcome = document.getElementById("welcomeScreen");
-const login = document.getElementById("loginScreen");
-
-welcome.classList.remove("show");
-login.style.display = "none";
-
-// ⚠️ DO NOT play sound immediately
-// Wait for first user interaction
-
-let soundPlayed = false;
-
-function startExperience() {
-
-    if (!soundPlayed) {
-        playIntroSound();
-        soundPlayed = true;
+    if((user === "admin" && pass === "admin123") || (user === savedUser && pass === savedPass)){
+        document.getElementById("currentUser").innerText = user;
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("mainApp").style.display = "block";
+    }else{
+        document.getElementById("loginError").innerText = "Invalid Username or Password";
     }
-
-    document.removeEventListener("click", startExperience);
-    document.removeEventListener("keydown", startExperience);
 }
 
-document.addEventListener("click", startExperience);
-document.addEventListener("keydown", startExperience);
+window.onload = function () {
+    const splash = document.getElementById("splash-screen");
+    const welcome = document.getElementById("welcomeScreen");
+    const login = document.getElementById("loginScreen");
 
-setTimeout(() => {
-
-    splash.classList.add("fade-out");
+    welcome.classList.remove("show");
+    login.style.display = "none";
 
     setTimeout(() => {
-
-        splash.style.display = "none";
-
-        welcome.classList.add("show");
-
+        splash.classList.add("fade-out");
         setTimeout(() => {
-
-            welcome.classList.remove("show");
-
+            splash.style.display = "none";
+            welcome.classList.add("show");
             setTimeout(() => {
-
-                welcome.style.display = "none";
-                login.style.display = "flex";
-
-            }, 800);
-
-        }, 2500);
-
-    }, 800);
-
-}, 2500);
+                welcome.classList.remove("show");
+                setTimeout(() => {
+                    welcome.style.display = "none";
+                    login.style.display = "flex";
+                }, 800);
+            }, 2500);
+        }, 800);
+    }, 2500);
 };
-    // ----------- GLOBAL CENTERED WATERMARK (3-LINE) -----------
- // ----------- VELINO WATERMARK -----------
 
+/* WATERMARK */
 function addVelinoWatermark() {
+    document.getElementById("velino-watermark")?.remove();
+    document.getElementById("velino-watermark-style")?.remove();
 
-// Remove old watermark/style if exists
-document.getElementById("velino-watermark")?.remove();
-document.getElementById("velino-watermark-style")?.remove();
+    const style = document.createElement("style");
+    style.id = "velino-watermark-style";
+    style.innerHTML = `
+    @keyframes velinoRoleRoll {
+        0%,15% { transform: translateY(0px); }
+        20%,35% { transform: translateY(-30px); }
+        40%,55% { transform: translateY(-60px); }
+        60%,75% { transform: translateY(-90px); }
+        80%,95% { transform: translateY(-120px); }
+        100% { transform: translateY(-150px); }
+    }`;
+    document.head.appendChild(style);
 
-// Animation Style
-const style = document.createElement("style");
-style.id = "velino-watermark-style";
+    const wmContainer = document.createElement("div");
+    wmContainer.id = "velino-watermark";
+    wmContainer.style.position = "fixed";
+    wmContainer.style.top = "90%";
+    wmContainer.style.left = "50%";
+    wmContainer.style.transform = "translate(-50%, -50%)";
+    wmContainer.style.textAlign = "center";
+    wmContainer.style.pointerEvents = "none";
+    wmContainer.style.userSelect = "none";
+    wmContainer.style.zIndex = "0";
 
-style.innerHTML = `
-@keyframes velinoRoleRoll {
+    const title = document.createElement("div");
+    title.style.fontSize = "80px";
+    title.style.fontWeight = "400";
+    title.style.letterSpacing = "6px";
+    title.style.color = "#888";
+    title.style.lineHeight = "1";
 
-    0%,15% {
-        transform: translateY(0px);
-    }
+    const rollWrapper = document.createElement("div");
+    rollWrapper.style.height = "30px";
+    rollWrapper.style.overflow = "hidden";
 
-    20%,35% {
-        transform: translateY(-30px);
-    }
+    const rollingText = document.createElement("div");
+    rollingText.innerHTML = `
+        <div>• Developed By Shiva Velishoju</div>
+        <div>• Founder of Velino IDE</div>
+        <div>• Full Stack Developer</div>
+        <div>• Frontend Developer</div>
+        <div>• AI Enthusiast</div>
+        <div>• Electronics Engineer</div>
+        <div>• Developed By Shiva Velishoju</div>
+    `;
+    rollingText.style.display = "flex";
+    rollingText.style.flexDirection = "column";
+    rollingText.style.alignItems = "center";
+    rollingText.style.fontSize = "18px";
+    rollingText.style.fontWeight = "500";
+    rollingText.style.color = "#888";
+    rollingText.style.animation = "velinoRoleRoll 12s infinite ease-in-out";
 
-    40%,55% {
-        transform: translateY(-60px);
-    }
+    Array.from(rollingText.children).forEach(item => {
+        item.style.height = "30px";
+        item.style.lineHeight = "30px";
+    });
 
-    60%,75% {
-        transform: translateY(-90px);
-    }
-
-    80%,95% {
-        transform: translateY(-120px);
-    }
-
-    100% {
-        transform: translateY(-150px);
-    }
-}
-`;
-
-document.head.appendChild(style);
-
-// Main Watermark Container
-const wmContainer = document.createElement("div");
-wmContainer.id = "velino-watermark";
-
-wmContainer.style.position = "fixed";
-wmContainer.style.top = "90%";
-wmContainer.style.left = "50%";
-wmContainer.style.transform = "translate(-50%, -50%)";
-wmContainer.style.textAlign = "center";
-wmContainer.style.opacity = "4";
-wmContainer.style.pointerEvents = "none";
-wmContainer.style.userSelect = "none";
-wmContainer.style.zIndex = "0";
-
-// ==========================
-// Main Title
-// ==========================
-const title = document.createElement("div");
-// title.innerText = "Velino Ecosystem";
-title.style.fontSize = "80px";
-title.style.fontWeight = 400;
-    title.style.letterSpacing = "6px";   // <-- Add this
-title.style.color = "#888";
-title.style.lineHeight = "1";
-title.style.whiteSpace = "nowrap";
-title.style.marginBottom = "10px";
-
-// ==========================
-// Rotating Text Area
-// ==========================
-const rollWrapper = document.createElement("div");
-rollWrapper.style.height = "30px";
-rollWrapper.style.overflow = "hidden";
-rollWrapper.style.position = "relative";
-
-const rollingText = document.createElement("div");
-
-rollingText.innerHTML = `
-    <div>• Developed By Shiva Velishoju</div>
-    <div>• Founder of Velino IDE</div>
-    <div>• Full Stack Developer</div>
-    <div>• Frontend Developer</div>
-    <div>• AI Enthusiast</div>
-    <div>• Electronics Engineer</div>
-    <div>• Developed By Shiva Velishoju</div>
-`;
-
-rollingText.style.display = "flex";
-rollingText.style.flexDirection = "column";
-rollingText.style.alignItems = "center";
-rollingText.style.fontSize = "18px";
-rollingText.style.fontWeight = "500";
-rollingText.style.letterSpacing = "1px";
-rollingText.style.color = "#888";
-rollingText.style.animation =
-    "velinoRoleRoll 12s infinite ease-in-out";
-
-Array.from(rollingText.children).forEach(item => {
-    item.style.height = "30px";
-    item.style.lineHeight = "30px";
-    item.style.whiteSpace = "nowrap";
-    item.style.textAlign = "center";
-});
-
-rollWrapper.appendChild(rollingText);
-
-// Add Elements
-wmContainer.appendChild(title);
-wmContainer.appendChild(rollWrapper);
-
-// Add to Page
-document.body.appendChild(wmContainer);
+    rollWrapper.appendChild(rollingText);
+    wmContainer.appendChild(title);
+    wmContainer.appendChild(rollWrapper);
+    document.body.appendChild(wmContainer);
 }
 
-// Run
 addVelinoWatermark();
-    // ----------- END WATERMARK -----------
-        </script>
+</script>
+
 <div class="ticker-wrap">
     <div class="ticker">
         VELINO IDE &nbsp;&nbsp;&nbsp; ✦ &nbsp;&nbsp;&nbsp;
@@ -1909,39 +1114,5 @@ addVelinoWatermark();
         VELINO ECOSYSTEM
     </div>
 </div>
-<style>/* ========================= */
-    /* BOTTOM SCROLLING TICKER   */
-    /* ========================= */
-    
-    .ticker-wrap{
-        position:fixed;
-        bottom:0;
-        left:0;
-        width:100%;
-        height:35px;
-        background:#143068;
-        border-top:1px solid rgba(255,255,255,0.1);
-        overflow:hidden;
-        z-index:9999;
-    }
-    
-    .ticker{
-        white-space:nowrap;
-        color:#f9feff;
-        font-size:14px;
-        line-height:35px;
-        font-weight:600;
-        /* text-shadow:0 0 10px rgba(0,195,255,0.5); */
-        animation:tickerScroll 25s linear infinite;
-    }
-    
-    @keyframes tickerScroll{
-        0%{
-            transform:translateX(100%);
-        }
-        100%{
-            transform:translateX(-100%);
-        }
-    }</style>
 </body>
 </html>
