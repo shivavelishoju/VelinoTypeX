@@ -60,7 +60,7 @@ text-align: center;
 .topbar{
 display:flex;
 align-items:center;
-justify-space-between:space-between;
+justify-content:space-between;
 padding:12px 20px;
 margin-bottom:20px;
 background:rgba(40,48,67,0.9);
@@ -750,7 +750,7 @@ const words = [
 ];
 
 let soundEnabled = true;
-let audioCtx = null;
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 let testCompleted = false;
 let selectedTime = 60;
@@ -773,9 +773,6 @@ let startTime = Date.now();
 /* SOUND */
 function beep(freq,duration){
     if(!soundEnabled) return;
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
-
     let o = audioCtx.createOscillator();
     let g = audioCtx.createGain();
 
@@ -853,16 +850,14 @@ function renderText(){
 
 /* KEYBOARD ANIMATION HELPER */
 function animateVirtualKey(keyName) {
-    const targetKey = keyName === " " ? " " : keyName.toLowerCase();
-    const keyElement = document.querySelector(`.key[data-key="${targetKey}"]`);
+    const keyElement = document.querySelector(`.key[data-key="${keyName.toLowerCase()}"]`);
     if (keyElement) {
         keyElement.classList.add("pressed");
     }
 }
 
 function removeVirtualKeyAnimation(keyName) {
-    const targetKey = keyName === " " ? " " : keyName.toLowerCase();
-    const keyElement = document.querySelector(`.key[data-key="${targetKey}"]`);
+    const keyElement = document.querySelector(`.key[data-key="${keyName.toLowerCase()}"]`);
     if (keyElement) {
         keyElement.classList.remove("pressed");
     }
@@ -870,16 +865,8 @@ function removeVirtualKeyAnimation(keyName) {
 
 /* KEYBOARD EVENTS */
 document.addEventListener("keydown",(e)=>{
-    // Ignore input if focusing input fields (login/register)
-    if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
-
-    if(!chars.length || testCompleted) return;
+    if(!chars.length) return;
     if(e.key.length !== 1 && e.key !== "Backspace") return;
-
-    // Prevent default scrolling on space / page navigation keys
-    if(e.key === " " || e.key === "Backspace") {
-        e.preventDefault();
-    }
 
     animateVirtualKey(e.key);
 
